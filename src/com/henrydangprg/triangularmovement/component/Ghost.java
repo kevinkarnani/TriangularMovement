@@ -1,15 +1,17 @@
 package com.henrydangprg.triangularmovement.component;
 
+import javafx.scene.shape.Circle;
+
 public class Ghost {
 
-	private Encoder encoderLeft;
-	private Encoder encoderTop;
-	private Encoder encoderRight;
+	private Motor motorLeft;
+	private Motor motorTop;
+	private Motor motorRight;
 	
-	public Ghost(Encoder encoderLeft, Encoder encoderTop, Encoder encoderRight){
-		this.encoderLeft = encoderLeft;
-		this.encoderTop = encoderTop;
-		this.encoderRight = encoderRight;
+	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
+		this.motorLeft = motorLeft;
+		this.motorTop = motorTop;
+		this.motorRight = motorRight;
 	}
 	
 	public Coordinate getPosition(){
