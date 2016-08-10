@@ -35,7 +35,6 @@ public class Main extends Application {
 	
 	private final double GHOST_STARTING_X = 250.0;
 	private final double GHOST_STARTING_Y = 266.67;
-	private final double GHOST_RADIUS = 1.0;
 	
 	Polygon triangle = new Polygon();
 	
@@ -66,6 +65,8 @@ public class Main extends Application {
  		Group layout = new Group(ghost, triangle, leftLine, topLine, rightLine);
  		
  		triangle.toBack();
+ 		
+ 		moveGhostTo(GHOST_STARTING_X,GHOST_STARTING_Y);
  		
  		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
  		
@@ -113,4 +114,25 @@ public class Main extends Application {
 		stage.setScene(scene);
 		stage.show();
 	}
+	
+	private void moveGhostBy(double deltaX, double deltaY) {
+        final double centerX = ghost.getBoundsInLocal().getWidth()  / 2;
+        final double centerY = ghost.getBoundsInLocal().getHeight() / 2;
+        
+        double x = centerX + ghost.getLayoutX() + deltaX;
+        double y = centerY + ghost.getLayoutY() + deltaY;
+
+        moveGhostTo(x, y);
+    }
+	private void moveGhostTo(double x, double y) {
+        final double centerX = ghost.getBoundsInLocal().getWidth()  / 2;
+        final double centerY = ghost.getBoundsInLocal().getHeight() / 2;
+
+        if (x - centerX >= 0 &&
+            x + centerX <= WIDTH &&
+            y - centerY >= 0 &&
+            y + centerY <= HEIGHT) {
+        	ghost.relocate(x - centerX, y - centerY);
+        }
+    }
 }
