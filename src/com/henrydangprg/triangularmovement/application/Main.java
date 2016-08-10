@@ -69,6 +69,46 @@ public class Main extends Application {
  		
  		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
  		
+ 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        	@Override
+        	public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case UP:    
+                    	goNorth = true; 
+                    	break;
+                    case DOWN:  
+                    	goSouth = true; 
+                    	break;
+                    case LEFT:  
+                    	goWest  = true; 
+                    	break;
+                    case RIGHT: 
+                    	goEast  = true; 
+                    	break;
+                }
+            }
+        });
+        
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case UP:    
+                    	goNorth = false; 
+                    	break;
+                    case DOWN:  
+                    	goSouth = false; 
+                    	break;
+                    case LEFT:  
+                    	goWest  = false; 
+                    	break;
+                    case RIGHT: 
+                    	goEast  = false; 
+                    	break;
+                }
+            }
+        });
+        
  		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
