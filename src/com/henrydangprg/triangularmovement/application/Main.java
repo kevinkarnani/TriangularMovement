@@ -1,5 +1,7 @@
 package com.henrydangprg.triangularmovement.application;
 
+import java.net.URL;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -29,12 +31,19 @@ public class Main extends Application {
 	private Node ghost;
 	private Image ghostImage;
 
-	private static final String GHOST_IMAGE_LOC = "https://lh3.googleusercontent.com/-Hcp_WDmAQ3I/AAAAAAAAAAI/AAAAAAAACt0/nldggsC7BIo/s46-c-k-no/photo.jpg";
-
+	private static final String GHOST_IMAGE_LOC = "illuminatiGhost.jpg";
+	
 	boolean goNorth, goSouth, goEast, goWest;
 
 	private final double GHOST_STARTING_X = 250.0;
 	private final double GHOST_STARTING_Y = 266.67;
+	
+	Line leftLine = new Line(LEFT_VERTEX_X, LEFT_VERTEX_Y,
+			GHOST_STARTING_X, GHOST_STARTING_Y);
+	Line topLine = new Line(TOP_VERTEX_X, TOP_VERTEX_Y, GHOST_STARTING_X,
+			GHOST_STARTING_Y);
+	Line rightLine = new Line(RIGHT_VERTEX_X, RIGHT_VERTEX_Y,
+			GHOST_STARTING_X, GHOST_STARTING_Y);
 
 	Polygon triangle = new Polygon();
 
@@ -50,15 +59,8 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 
-		ghostImage = new Image(GHOST_IMAGE_LOC);
+		ghostImage = new Image(getClass().getResourceAsStream(GHOST_IMAGE_LOC));
 		ghost = new ImageView(ghostImage);
-
-		Line leftLine = new Line(LEFT_VERTEX_X, LEFT_VERTEX_Y,
-				GHOST_STARTING_X, GHOST_STARTING_Y);
-		Line topLine = new Line(TOP_VERTEX_X, TOP_VERTEX_Y, GHOST_STARTING_X,
-				GHOST_STARTING_Y);
-		Line rightLine = new Line(RIGHT_VERTEX_X, RIGHT_VERTEX_Y,
-				GHOST_STARTING_X, GHOST_STARTING_Y);
 
 		triangle.getPoints().addAll(
 				new Double[] { LEFT_VERTEX_X, LEFT_VERTEX_Y, TOP_VERTEX_X,
@@ -136,19 +138,8 @@ public class Main extends Application {
 				}
 
 				moveGhostBy(deltaX, deltaY);
-
-				final double centerX = ghost.getBoundsInLocal().getWidth() / 2;
-				final double centerY = ghost.getBoundsInLocal().getHeight() / 2;
-
-				double xPosition = centerX + ghost.getLayoutX();
-				double yPosition = centerY + ghost.getLayoutY();
-
-				leftLine.setEndX(xPosition);
-				leftLine.setEndY(yPosition);
-				topLine.setEndX(xPosition);
-				topLine.setEndY(yPosition);
-				rightLine.setEndX(xPosition);
-				rightLine.setEndY(yPosition);
+				
+				moveLineWithGhost();
 			}
 		};
 		timer.start();
@@ -172,5 +163,21 @@ public class Main extends Application {
 				&& y + centerY <= HEIGHT) {
 			ghost.relocate(x - centerX, y - centerY);
 		}
+	}
+	
+	private void moveLineWithGhost(){
+		
+		final double centerX = ghost.getBoundsInLocal().getWidth() / 2;
+		final double centerY = ghost.getBoundsInLocal().getHeight() / 2;
+
+		double xPosition = centerX + ghost.getLayoutX();
+		double yPosition = centerY + ghost.getLayoutY();
+
+		leftLine.setEndX(xPosition);
+		leftLine.setEndY(yPosition);
+		topLine.setEndX(xPosition);
+		topLine.setEndY(yPosition);
+		rightLine.setEndX(xPosition);
+		rightLine.setEndY(yPosition);
 	}
 }
