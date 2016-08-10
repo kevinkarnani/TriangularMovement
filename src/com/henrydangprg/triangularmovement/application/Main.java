@@ -57,7 +57,16 @@ public class Main extends Application {
  		Line topLine = new Line(TOP_VERTEX_X, TOP_VERTEX_Y, GHOST_STARTING_X, GHOST_STARTING_Y);
  		Line rightLine = new Line(RIGHT_VERTEX_X, RIGHT_VERTEX_Y, GHOST_STARTING_X, GHOST_STARTING_Y);
  		
+ 		triangle.getPoints().addAll(new Double[]{
+                LEFT_VERTEX_X, LEFT_VERTEX_Y,
+                TOP_VERTEX_X, TOP_VERTEX_Y,
+                RIGHT_VERTEX_X, RIGHT_VERTEX_Y });
+        triangle.setFill(Color.WHITE);
+ 		
  		Group layout = new Group(ghost, triangle, leftLine, topLine, rightLine);
+ 		
+ 		triangle.toBack();
+ 		
  		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
  		
  		stage.setTitle("Simulation");
