@@ -136,6 +136,19 @@ public class Main extends Application {
 				}
 
 				moveGhostBy(deltaX, deltaY);
+				
+                final double centerX = ghost.getBoundsInLocal().getWidth()  / 2;
+                final double centerY = ghost.getBoundsInLocal().getHeight() / 2;
+                
+                double xPosition = centerX + ghost.getLayoutX();
+                double yPosition = centerY + ghost.getLayoutY();
+                
+         		leftLine.setEndX(xPosition);
+         		leftLine.setEndY(yPosition);
+         		topLine.setEndX(xPosition);
+         		topLine.setEndY(yPosition);
+         		rightLine.setEndX(xPosition);
+         		rightLine.setEndY(yPosition);
 			}
 		};
 		timer.start();
