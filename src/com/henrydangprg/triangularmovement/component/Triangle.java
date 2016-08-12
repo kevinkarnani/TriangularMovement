@@ -11,7 +11,7 @@ public class Triangle {
 	public static final double TOP_VERTEX_Y = 0.0;
 	public static final double RIGHT_VERTEX_X = 500.0;
 	public static final double RIGHT_VERTEX_Y = 400.0;
-	private Polygon triangle;
+	private static Polygon triangle;
 	
 	public Triangle(){
 		triangle = new Polygon();
@@ -21,7 +21,7 @@ public class Triangle {
 		triangle.setFill(Color.WHITE);
 	}
 	
-	public void sendToBack(){
+	public static void sendToBack(){
 		triangle.toBack();
 	}
 

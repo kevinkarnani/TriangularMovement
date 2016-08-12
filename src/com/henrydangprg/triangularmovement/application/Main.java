@@ -1,6 +1,10 @@
 package com.henrydangprg.triangularmovement.application;
 
+import com.henrydangprg.triangularmovement.component.Encoder;
+import com.henrydangprg.triangularmovement.component.Ghost;
+import com.henrydangprg.triangularmovement.component.Motor;
 import com.henrydangprg.triangularmovement.component.Triangle;
+import com.henrydangprg.triangularmovement.component.Wire;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -17,8 +21,11 @@ public class Main extends Application {
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
 	private Triangle triangle;
+	private Wire leftWire, topWire, rightWire;
+	private Ghost ghost;
+	private Motor leftMotor, rightMotor, topMotor;
+	private Encoder encoder;
 	boolean goNorth, goSouth, goEast, goWest;
-
 
 	/**
 	 * Launches the program
@@ -31,10 +38,20 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-
+		encoder = new Encoder();
+		rightMotor = new Motor(encoder);
+		leftMotor = new Motor(encoder);
+		topMotor = new Motor(encoder);
 		triangle = new Triangle();
-		Group layout = new Group(triangle.getTriangle());
-				//leftLine, topLine, rightLine);
+		ghost = new Ghost(leftMotor, topMotor, rightMotor);
+		leftWire = new Wire(ghost);
+		rightWire = new Wire(ghost);
+		topWire = new Wire(ghost);
+		Group layout = new Group(ghost.setPosition(), triangle.getTriangle(),
+				leftWire.getLeftWire(), rightWire.getRightWire(),
+				topWire.getTopWire());
+
+		Triangle.sendToBack();
 
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
 
@@ -78,23 +95,23 @@ public class Main extends Application {
 			}
 		});
 
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-            	//Magic here
-            }
-        };
+		AnimationTimer timer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				Wire.moveGhostWithWire();
+			}
+		};
 
-        timer.start();		
+		timer.start();
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
-	
+
 	}
-	
-	private void movemenHandler(KeyEvent event) {
-		switch(event.getCode()) {
-		
+
+	private void movementHandler(KeyEvent event) {
+		switch (event.getCode()) {
+
 		}
 	}
 }
