@@ -8,9 +8,12 @@ public class Ghost {
 	private Motor motorLeft;
 	private Motor motorTop;
 	private Motor motorRight;
+	
 	protected static Circle ghostRepresentation;
-	public static final double GHOST_STARTING_X = Triangle.RIGHT_VERTEX_X;
-	public static final double GHOST_STARTING_Y = Triangle.RIGHT_VERTEX_Y;
+	Triangle triangle = new Triangle();
+	
+	final double GHOST_STARTING_X = triangle.getRIGHT_VERTEX_X();
+	final double GHOST_STARTING_Y = triangle.getRIGHT_VERTEX_Y();
 
 	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight) {
 		this.motorLeft = motorLeft;
@@ -27,6 +30,16 @@ public class Ghost {
 		ghostRepresentation.setCenterX(GHOST_STARTING_X);
 		ghostRepresentation.setCenterY(GHOST_STARTING_Y);
 		return ghostRepresentation;
+	}
+	
+	public void getGhostPositionInSimulation() {
+		final double centerX = Ghost.ghostRepresentation.getBoundsInLocal()
+				.getWidth() / 2;
+		final double centerY = Ghost.ghostRepresentation.getBoundsInLocal()
+				.getHeight() / 2;
+
+		double xPosition = centerX + Ghost.ghostRepresentation.getLayoutX();
+		double yPosition = centerY + Ghost.ghostRepresentation.getLayoutY();
 	}
 
 	public Coordinate getPosition() {
