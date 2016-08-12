@@ -1,9 +1,9 @@
 package com.henrydangprg.triangularmovement.component;
 
 public class Encoder {
-	private int value = 0;
+	private double value = 0;
 	
-	public void setValue(int value){
+	public void setValue(double value){
 		this.value = value;
 	}
 	
