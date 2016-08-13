@@ -5,27 +5,14 @@ import javafx.scene.shape.Line;
 public class Wire {
 
 	Ghost ghost;
-	Line leftWire;
-	Line topWire;
-	Line rightWire;
+	Line line;
 
-	// Place your actual wires here as lines
-	public Wire(Ghost ghost, Line leftWire, Line topWire, Line rightWire) {
+	public Wire(Ghost ghost) {
 		this.ghost = ghost;
-		this.leftWire = leftWire;
-		this.topWire = topWire;
-		this.rightWire = rightWire;
+		line = new Line();
 	}
 
-	public Line getLeftWire() {
-		return leftWire;
-	}
-
-	public Line getRightWire() {
-		return rightWire;
-	}
-
-	public Line getTopWire() {
-		return topWire;
+	public Line getLine() {
+		return line;
 	}
 }

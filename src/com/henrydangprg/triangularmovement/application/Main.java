@@ -22,8 +22,7 @@ public class Main extends Application {
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
 	private Triangle triangle;
-	Line leftWire, topWire, rightWire;
-	private Wire wire;
+	private Wire topWire, leftWire, rightWire;
 	private Ghost ghost;
 	private Motor leftMotor, rightMotor, topMotor;
 	private Encoder encoder;
@@ -46,11 +45,12 @@ public class Main extends Application {
 		topMotor = new Motor(encoder);
 		triangle = new Triangle();
 		ghost = new Ghost(leftMotor, topMotor, rightMotor);
-		wire = new Wire(ghost, leftWire, topWire, rightWire);
-		
+		leftWire = new Wire(ghost);
+		rightWire = new Wire(ghost);
+		topWire = new Wire(ghost);
+
 		Group layout = new Group(ghost.setPosition(), triangle.getTriangle(),
-				wire.getLeftWire(), wire.getRightWire(),
-				wire.getTopWire());
+				leftWire.getLine(), rightWire.getLine(), topWire.getLine());
 
 		triangle.sendToBack();
 
@@ -99,7 +99,7 @@ public class Main extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				
+
 			}
 		};
 
