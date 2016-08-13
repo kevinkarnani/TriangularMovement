@@ -5,22 +5,22 @@ import javafx.scene.shape.Polygon;
 
 public class Triangle {
 
-	final double LEFT_VERTEX_X = 0.0;
-	final double LEFT_VERTEX_Y = 400.0;
-	final double TOP_VERTEX_X = 250.0;
-	final double TOP_VERTEX_Y = 0.0;
-	final double RIGHT_VERTEX_X = 500.0;
-	final double RIGHT_VERTEX_Y = 400.0;
+	private final double LEFT_VERTEX_X = 0.0;
+	private final double LEFT_VERTEX_Y = 400.0;
+	private final double TOP_VERTEX_X = 250.0;
+	private final double TOP_VERTEX_Y = 0.0;
+	private final double RIGHT_VERTEX_X = 500.0;
+	private final double RIGHT_VERTEX_Y = 400.0;
 	private Polygon triangle = new Polygon();;
-	
-	public Triangle(){
+
+	public Triangle() {
 		triangle.getPoints().addAll(
 				new Double[] { LEFT_VERTEX_X, LEFT_VERTEX_Y, TOP_VERTEX_X,
 						TOP_VERTEX_Y, RIGHT_VERTEX_X, RIGHT_VERTEX_Y });
 		triangle.setFill(Color.WHITE);
 	}
-	
-	public void sendToBack(){
+
+	public void sendToBack() {
 		triangle.toBack();
 	}
 
@@ -70,4 +70,3 @@ public class Triangle {
 		return RIGHT_VERTEX_Y;
 	}
 }
-

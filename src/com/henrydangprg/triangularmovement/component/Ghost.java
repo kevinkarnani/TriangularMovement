@@ -41,7 +41,7 @@ public class Ghost {
 	}
 
 	public Coordinate getPosition() {
-		Coordinate coordinate = new Coordinate(100 ,100);
+		Coordinate coordinate = new Coordinate(100, 100);
 		return coordinate;
 	}
 }

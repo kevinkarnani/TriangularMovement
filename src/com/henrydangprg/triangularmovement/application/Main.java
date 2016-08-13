@@ -49,15 +49,15 @@ public class Main extends Application {
 		rightWire = new Wire(ghost);
 		topWire = new Wire(ghost);
 
-		leftWire.setLine(triangle.getLEFT_VERTEX_X(), triangle.getLEFT_VERTEX_Y(), ghost.getPosition());
-		
-		
+		leftWire.setLine(triangle.getLEFT_VERTEX_X(),
+				triangle.getLEFT_VERTEX_Y(), ghost.getPosition());
+
 		Group layout = new Group(ghost.setPosition(), triangle.getTriangle(),
 				leftWire.getLine(), rightWire.getLine(), topWire.getLine());
 
 		triangle.sendToBack();
 
-		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.WHITE);
+		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
