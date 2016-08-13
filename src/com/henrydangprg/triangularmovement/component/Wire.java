@@ -15,4 +15,11 @@ public class Wire {
 	public Line getLine() {
 		return line;
 	}
+	
+	public void setLine(double startX, double startY, Coordinate coordinate){
+		line.setStartX(startX);
+		line.setStartY(startY);
+		line.setEndX(coordinate.getX());
+		line.setEndY(coordinate.getY());
+	}
 }
