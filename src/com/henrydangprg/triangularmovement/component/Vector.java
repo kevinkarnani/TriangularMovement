@@ -4,32 +4,32 @@ import java.util.ArrayList;
 
 public class Vector {
 
-	private ArrayList<Double> vector;
-	private final double n;
+	private ArrayList<Double> vector ;
+	private final double lengthOfVector;
 
-	public Vector(int n) {
-		this.n = n;
-		this.vector = new ArrayList<Double>(n);
+	public Vector(double lengthOfVector) {
+		this.lengthOfVector = lengthOfVector;
+		this.vector = new ArrayList<Double>();
 	}
 
 	public double length() {
-		return n;
+		return lengthOfVector;
 	}
 
 	public double dot(Vector that) {
 		if (this.length() != that.length()) {
-			throw new IllegalArgumentException("Dimensions disagree");
+			throw new IllegalArgumentException("Component does not match");
 		}
 		double sum = 0.0;
-		for (double i = 0; i < n; i++) {
-			sum = sum + (this.vector.add(i) * that.vector.add(i));
+		for (int i = 0; i < lengthOfVector; i++) {
+			sum = sum + this.vector.get(i) * that.vector.get(i);
 		}
 		return sum;
 	}
 
 	public Vector times(double factor) {
-		Vector c = new Vector((int) n);
-		for (int i = 0; i < n; i++) {
+		Vector c = new Vector(lengthOfVector);
+		for (int i = 0; i < lengthOfVector; i++) {
 			c.vector.add((double) i);
 		}
 		return c;
@@ -41,7 +41,7 @@ public class Vector {
 
 	public Vector direction() {
 		if (this.magnitude() == 0.0) {
-			throw new RuntimeException("Zero-vector has no direction");
+			throw new RuntimeException("You just created a zero vector.");
 		}
 		return this.times(1.0 / this.magnitude());
 	}
