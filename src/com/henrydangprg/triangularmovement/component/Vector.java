@@ -1,6 +1,7 @@
 package com.henrydangprg.triangularmovement.component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Vector {
 
@@ -47,8 +48,8 @@ public class Vector {
 	}
 
 	public void loopThroughElements() {
-		vector = new ArrayList<Double>();
-		vector.add(lengthOfVector);
+		Collection<? extends Double> numberOfIndeces = null;
+		vector.addAll(numberOfIndeces);
 		int indeces = vector.size();
 		for (int i = 0; i < indeces; i++) {
 			System.out.println(vector.get(indeces));
