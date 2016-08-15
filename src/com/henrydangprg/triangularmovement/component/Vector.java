@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Vector {
 
-	private ArrayList<Double> vector ;
+	private ArrayList<Double> vector;
 	private final double lengthOfVector;
 
 	public Vector(double lengthOfVector) {
@@ -44,5 +44,14 @@ public class Vector {
 			throw new RuntimeException("You just created a zero vector.");
 		}
 		return this.times(1.0 / this.magnitude());
+	}
+
+	public void loopThroughElements() {
+		vector = new ArrayList<Double>();
+		vector.add(lengthOfVector);
+		int indeces = vector.size();
+		for (int i = 0; i < indeces; i++) {
+			System.out.println(vector.get(indeces));
+		}
 	}
 }
