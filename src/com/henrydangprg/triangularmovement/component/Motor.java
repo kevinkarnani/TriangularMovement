@@ -29,8 +29,8 @@ public class Motor {
 		return motor;
 	}
 	
-	public double[] getMotorPosition() {
-		return motorCoord.getXY();
+	public Coordinate getMotorPosition() {
+		return motorCoord;
 	}
 	
 	public double getEncoderValue(){

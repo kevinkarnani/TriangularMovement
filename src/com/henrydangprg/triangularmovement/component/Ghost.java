@@ -9,39 +9,39 @@ public class Ghost {
 	private Motor motorTop;
 	private Motor motorRight;
 
-	protected static Circle ghostRepresentation;
-	Triangle triangle = new Triangle();
-
-	final double GHOST_STARTING_X = triangle.getRIGHT_VERTEX_X();
-	final double GHOST_STARTING_Y = triangle.getRIGHT_VERTEX_Y();
-
-	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight) {
+	private Circle ghostRepresentation;
+	
+	private Coordinate coord;
+	
+	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
 		this.motorLeft = motorLeft;
 		this.motorTop = motorTop;
 		this.motorRight = motorRight;
-	}
-
-	public Circle setPosition() {
-		ghostRepresentation = new Circle();
+		coord = new Coordinate();
+		ghostRepresentation = new Circle(); 
 		ghostRepresentation.setRadius(10);
-		ghostRepresentation.setFill(Color.CRIMSON);
-		ghostRepresentation.setCenterX(GHOST_STARTING_X);
-		ghostRepresentation.setCenterY(GHOST_STARTING_Y);
+		ghostRepresentation.setFill(Color.CHOCOLATE);
+	}
+	
+	public Coordinate getPosition(){
+		return coord;
+	}
+	
+	public Circle getGhost() {
 		return ghostRepresentation;
 	}
 
-	public void getGhostPositionInSimulation() {
-		final double centerX = Ghost.ghostRepresentation.getBoundsInLocal()
-				.getWidth() / 2;
-		final double centerY = Ghost.ghostRepresentation.getBoundsInLocal()
-				.getHeight() / 2;
-
-		double xPosition = centerX + Ghost.ghostRepresentation.getLayoutX();
-		double yPosition = centerY + Ghost.ghostRepresentation.getLayoutY();
+	public void setPosition() {
+	}
+	
+	public void resetToCenter() {
+		coord.setX((motorLeft.getMotorPosition().getX() + motorRight.getMotorPosition().getX() + motorTop.getMotorPosition().getX())/3);
+		coord.setY((motorLeft.getMotorPosition().getY() + motorRight.getMotorPosition().getY() + motorTop.getMotorPosition().getY())/3);
+		ghostRepresentation.setCenterX(coord.getX());
+		ghostRepresentation.setCenterY(coord.getY());
 	}
 
-	public Coordinate getPosition() {
-		Coordinate coordinate = new Coordinate(100, 100);
-		return coordinate;
+	public Coordinate getCoordinate(){
+		return coord;
 	}
 }
