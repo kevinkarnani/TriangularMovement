@@ -21,12 +21,14 @@ public class Main extends Application {
 
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
-	private Triangle triangle;
-	private Wire topWire, leftWire, rightWire;
-	private Ghost ghost;
-	private Motor leftMotor, rightMotor, topMotor;
-	private Encoder encoder;
+	
 	boolean goNorth, goSouth, goEast, goWest;
+	
+	private Encoder aMotorEncoder, bMotorEncoder, cMotorEncoder;
+	private Motor aMotor, bMotor, cMotor;
+	private Triangle triangle;
+	private Ghost ghost;
+	private Wire wireA, wireB, wireC;
 
 	/**
 	 * Launches the program
@@ -39,23 +41,29 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		encoder = new Encoder();
-		rightMotor = new Motor(encoder);
-		leftMotor = new Motor(encoder);
-		topMotor = new Motor(encoder);
+		
 		triangle = new Triangle();
-		ghost = new Ghost(leftMotor, topMotor, rightMotor);
-		leftWire = new Wire(ghost);
-		rightWire = new Wire(ghost);
-		topWire = new Wire(ghost);
 
-		leftWire.setLine(triangle.getLEFT_VERTEX_X(),
-				triangle.getLEFT_VERTEX_Y(), ghost.getPosition());
+		aMotor = new Motor(triangle.getTopVertex(), aMotorEncoder);
+		bMotor = new Motor(triangle.getLeftVertex(), bMotorEncoder);
+		cMotor = new Motor(triangle.getRightVertex(), cMotorEncoder);
+		
+		ghost = new Ghost(aMotor, bMotor, cMotor);
+		ghost.resetToCenter();
+		
+		wireA = new Wire(ghost);
+		wireB = new Wire(ghost);
+		wireC = new Wire(ghost);
+		
+		wireA.attachFrom(aMotor.getMotorPosition());
+		wireB.attachFrom(bMotor.getMotorPosition());
+		wireC.attachFrom(cMotor.getMotorPosition());
+		
+		ghost.resetToCenter();
 
-		Group layout = new Group(ghost.setPosition(), triangle.getTriangle(),
-				leftWire.getLine(), rightWire.getLine(), topWire.getLine());
-
-		triangle.sendToBack();
+		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
+				 				 wireA.getLine(), wireB.getLine(), wireC.getLine(),
+								 aMotor.getMotorShape(), bMotor.getMotorShape(), cMotor.getMotorShape());
 
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
 
@@ -100,11 +108,11 @@ public class Main extends Application {
 		});
 
 		AnimationTimer timer = new AnimationTimer() {
-			@Override
-			public void handle(long now) {
-
-			}
-		};
+            @Override
+            public void handle(long now) {
+        		
+            }
+        };
 
 		timer.start();
 		stage.setTitle("Simulation");
