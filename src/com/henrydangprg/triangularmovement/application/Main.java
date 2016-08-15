@@ -13,6 +13,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 // Java 8 code
@@ -20,14 +21,12 @@ public class Main extends Application {
 
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
-	
-	boolean goNorth, goSouth, goEast, goWest;
-	
-	private Encoder aMotorEncoder, bMotorEncoder, cMotorEncoder;
-	private Motor aMotor, bMotor, cMotor;
 	private Triangle triangle;
+	private Wire topWire, leftWire, rightWire;
 	private Ghost ghost;
-	private Wire wireA, wireB, wireC;
+	private Motor leftMotor, rightMotor, topMotor;
+	private Encoder encoder;
+	boolean goNorth, goSouth, goEast, goWest;
 
 	/**
 	 * Launches the program
@@ -40,24 +39,23 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		
+		encoder = new Encoder();
+		rightMotor = new Motor(encoder);
+		leftMotor = new Motor(encoder);
+		topMotor = new Motor(encoder);
 		triangle = new Triangle();
-		
-		aMotor = new Motor(triangle.getTopVertex(), aMotorEncoder);
-		bMotor = new Motor(triangle.getLeftVertex(), bMotorEncoder);
-		cMotor = new Motor(triangle.getRightVertex(), cMotorEncoder);
-		
-		ghost = new Ghost(aMotor, bMotor, cMotor);
-		
-		wireA = new Wire(aMotor, ghost);
-		wireB = new Wire(bMotor, ghost);
-		wireC = new Wire(cMotor, ghost);
-		
-		ghost.resetToCenter(triangle);
+		ghost = new Ghost(leftMotor, topMotor, rightMotor);
+		leftWire = new Wire(ghost);
+		rightWire = new Wire(ghost);
+		topWire = new Wire(ghost);
 
-		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
-				 				 wireA.getWire(), wireB.getWire(), wireC.getWire(),
-								 aMotor.getMotorShape(), bMotor.getMotorShape(), cMotor.getMotorShape());
+		leftWire.setLine(triangle.getLEFT_VERTEX_X(),
+				triangle.getLEFT_VERTEX_Y(), ghost.getPosition());
+
+		Group layout = new Group(ghost.setPosition(), triangle.getTriangle(),
+				leftWire.getLine(), rightWire.getLine(), topWire.getLine());
+
+		triangle.sendToBack();
 
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
 
@@ -101,25 +99,23 @@ public class Main extends Application {
 			}
 		});
 
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-        		wireA.setWire();
-        		wireB.setWire();
-        		wireC.setWire();
-            }
-        };
+		AnimationTimer timer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
 
-        timer.start();		
+			}
+		};
+
+		timer.start();
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
-	
+
 	}
-	
+
 	private void movementHandler(KeyEvent event) {
-		switch(event.getCode()) {
-		
+		switch (event.getCode()) {
+
 		}
 	}
 }
