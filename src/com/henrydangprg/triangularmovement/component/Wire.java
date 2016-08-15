@@ -3,23 +3,26 @@ package com.henrydangprg.triangularmovement.component;
 import javafx.scene.shape.Line;
 
 public class Wire {
+	
+	Line line = new Line();
 
 	Ghost ghost;
-	Line line;
-
-	public Wire(Ghost ghost) {
+	Motor motor;
+	
+	//Place your actual wires here as lines
+	public Wire(Motor motor, Ghost ghost){
+		this.motor = motor;
 		this.ghost = ghost;
-		line = new Line();
-	}
-
-	public Line getLine() {
-		return line;
+		line.setStartX(motor.getMotorPosition()[0]);
+		line.setStartY(motor.getMotorPosition()[1]);
 	}
 	
-	public void setLine(double startX, double startY, Coordinate coordinate){
-		line.setStartX(startX);
-		line.setStartY(startY);
-		line.setEndX(coordinate.getX());
-		line.setEndY(coordinate.getY());
+	public void setWire() {
+		line.setEndX(ghost.getPosition()[0]);
+		line.setEndY(ghost.getPosition()[1]);
+	}
+	
+	public Line getWire() {
+		return line;
 	}
 }
