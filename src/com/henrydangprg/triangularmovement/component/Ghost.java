@@ -8,38 +8,40 @@ public class Ghost {
 	private Motor motorLeft;
 	private Motor motorTop;
 	private Motor motorRight;
-	private Circle ghostRepresentation;
-	
-	private Coordinate coord = new Coordinate();
-	
-	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
+
+	protected static Circle ghostRepresentation;
+	Triangle triangle = new Triangle();
+
+	final double GHOST_STARTING_X = triangle.getRIGHT_VERTEX_X();
+	final double GHOST_STARTING_Y = triangle.getRIGHT_VERTEX_Y();
+
+	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight) {
 		this.motorLeft = motorLeft;
 		this.motorTop = motorTop;
 		this.motorRight = motorRight;
-		ghostRepresentation = new Circle(); 
+	}
+
+	public Circle setPosition() {
+		ghostRepresentation = new Circle();
 		ghostRepresentation.setRadius(10);
-		ghostRepresentation.setFill(Color.CHOCOLATE);
-	}
-	
-	public double[] getPosition(){
-		return coord.getXY();
-	}
-	
-	public Circle getGhost() {
+		ghostRepresentation.setFill(Color.CRIMSON);
+		ghostRepresentation.setCenterX(GHOST_STARTING_X);
+		ghostRepresentation.setCenterY(GHOST_STARTING_Y);
 		return ghostRepresentation;
 	}
-	
-	public void setPosition() {
+
+	public void getGhostPositionInSimulation() {
+		final double centerX = Ghost.ghostRepresentation.getBoundsInLocal()
+				.getWidth() / 2;
+		final double centerY = Ghost.ghostRepresentation.getBoundsInLocal()
+				.getHeight() / 2;
+
+		double xPosition = centerX + Ghost.ghostRepresentation.getLayoutX();
+		double yPosition = centerY + Ghost.ghostRepresentation.getLayoutY();
 	}
-	
-	public void resetToCenter(Triangle tri) {
-		coord.setX((tri.getLeftVertex()[0] + tri.getRightVertex()[0] + tri.getTopVertex()[0])/3);
-		coord.setY((tri.getLeftVertex()[1] + tri.getRightVertex()[1] + tri.getTopVertex()[1])/3);
-		ghostRepresentation.setCenterX(coord.getX());
-		ghostRepresentation.setCenterY(coord.getY());
-	}
-	
-	public Coordinate getCoordinate(){
-		return coord;
+
+	public Coordinate getPosition() {
+		Coordinate coordinate = new Coordinate(100, 100);
+		return coordinate;
 	}
 }
