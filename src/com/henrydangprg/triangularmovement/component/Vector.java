@@ -46,13 +46,4 @@ public class Vector {
 		}
 		return this.times(1.0 / this.magnitude());
 	}
-
-	public void loopThroughElements() {
-		Collection<? extends Double> numberOfIndeces = null;
-		vector.addAll(numberOfIndeces);
-		int indeces = vector.size();
-		for (int i = 0; i < indeces; i++) {
-			System.out.println(vector.get(indeces));
-		}
-	}
 }
