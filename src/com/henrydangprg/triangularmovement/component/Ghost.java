@@ -35,8 +35,8 @@ public class Ghost {
 	}
 	
 	public void resetToCenter() {
-		coord.setX((motorLeft.getMotorPosition().getX() + motorRight.getMotorPosition().getX() + motorTop.getMotorPosition().getX())/3);
-		coord.setY((motorLeft.getMotorPosition().getY() + motorRight.getMotorPosition().getY() + motorTop.getMotorPosition().getY())/3);
+		coord.setX(motorRight.getMotorPosition().getX());
+		coord.setY(motorRight.getMotorPosition().getY());
 		ghostRepresentation.setCenterX(coord.getX());
 		ghostRepresentation.setCenterY(coord.getY());
 	}

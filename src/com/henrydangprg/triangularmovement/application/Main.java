@@ -65,7 +65,12 @@ public class Main extends Application {
 				 				 wireA.getLine(), wireB.getLine(), wireC.getLine(),
 								 aMotor.getMotorShape(), bMotor.getMotorShape(), cMotor.getMotorShape());
 
-		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.BLACK);
+		aMotor.getMotorShape().toBack();
+		bMotor.getMotorShape().toBack();
+		cMotor.getMotorShape().toBack();
+
+		
+		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.AQUAMARINE);
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
