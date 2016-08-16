@@ -1,5 +1,7 @@
 package com.henrydangprg.triangularmovement.application;
 
+import java.util.Timer;
+
 import com.henrydangprg.triangularmovement.component.Encoder;
 import com.henrydangprg.triangularmovement.component.Ghost;
 import com.henrydangprg.triangularmovement.component.Motor;
@@ -21,11 +23,11 @@ public class Main extends Application {
 
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
-	
+
 	boolean goNorth, goSouth, goEast, goWest;
-	
-	private Encoder aMotorEncoder, bMotorEncoder, cMotorEncoder;
-	private Motor aMotor, bMotor, cMotor;
+
+	private Encoder topMotorEncoder, leftMotorEncoder, rightMotorEncoder;
+	private Motor topMotor, leftMotor, rightMotor;
 	private Triangle triangle;
 	private Ghost ghost;
 	private Wire wireA, wireB, wireC;
@@ -41,35 +43,35 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-		
+
 		triangle = new Triangle();
 
-		aMotor = new Motor(triangle.getTopVertex(), aMotorEncoder);
-		bMotor = new Motor(triangle.getLeftVertex(), bMotorEncoder);
-		cMotor = new Motor(triangle.getRightVertex(), cMotorEncoder);
-		
-		ghost = new Ghost(aMotor, bMotor, cMotor);
+		topMotor = new Motor(triangle.getTopVertex(), topMotorEncoder);
+		leftMotor = new Motor(triangle.getLeftVertex(), leftMotorEncoder);
+		rightMotor = new Motor(triangle.getRightVertex(), rightMotorEncoder);
+
+		ghost = new Ghost(topMotor, leftMotor, rightMotor);
 		ghost.resetToCenter();
-		
+
 		wireA = new Wire(ghost);
 		wireB = new Wire(ghost);
 		wireC = new Wire(ghost);
-		
-		wireA.attachFrom(aMotor.getMotorPosition());
-		wireB.attachFrom(bMotor.getMotorPosition());
-		wireC.attachFrom(cMotor.getMotorPosition());
-		
+
+		wireA.attachFrom(topMotor.getMotorPosition());
+		wireB.attachFrom(leftMotor.getMotorPosition());
+		wireC.attachFrom(rightMotor.getMotorPosition());
+
 		ghost.resetToCenter();
 
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
-				 				 wireA.getLine(), wireB.getLine(), wireC.getLine(),
-								 aMotor.getMotorShape(), bMotor.getMotorShape(), cMotor.getMotorShape());
+				wireA.getLine(), wireB.getLine(), wireC.getLine(),
+				topMotor.getMotorShape(), leftMotor.getMotorShape(),
+				rightMotor.getMotorShape());
 
-		aMotor.getMotorShape().toBack();
-		bMotor.getMotorShape().toBack();
-		cMotor.getMotorShape().toBack();
+		topMotor.getMotorShape().toBack();
+		leftMotor.getMotorShape().toBack();
+		rightMotor.getMotorShape().toBack();
 
-		
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.AQUAMARINE);
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -112,14 +114,24 @@ public class Main extends Application {
 			}
 		});
 
-		AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-        		
-            }
-        };
+		Timer timer = new Timer() {
+			public void handle(long now) {
+				double deltaOfX = 0, deltaOfY = 0, coordinateDelta = .155;
 
-		timer.start();
+				if (goNorth) {
+					deltaOfY -= coordinateDelta;
+				}
+				if (goSouth) {
+					deltaOfY += coordinateDelta;
+				}
+				if (goEast) {
+					deltaOfX += coordinateDelta;
+				}
+				if (goWest) {
+					deltaOfX -= coordinateDelta;
+				}
+			}
+		};
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
