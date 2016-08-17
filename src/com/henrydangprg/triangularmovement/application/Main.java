@@ -180,6 +180,9 @@ public class Main extends Application {
 					if (goDown) {
 						ghostVector.setDeltaZ(-HEIGHT_SPEED);
 					}
+					if(goEast && goWest){
+						ghostVector.setDeltaX(0);
+					}
 					if(goNorth && goSouth){
 						ghostVector.setDeltaY(0);
 					}
