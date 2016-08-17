@@ -13,7 +13,7 @@ public class Ghost {
 	
 	private Coordinate ghostCoord;
 	
-	private static double TOP_SIZE = 10;
+	private static double TOP_SIZE = 10.0;
 	
 	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
 		this.motorLeft = motorLeft;
