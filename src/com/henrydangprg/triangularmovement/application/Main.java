@@ -180,6 +180,9 @@ public class Main extends Application {
 					if (goDown) {
 						ghostVector.setDeltaZ(-HEIGHT_SPEED);
 					}
+					if(goNorth && goSouth){
+						ghostVector.setDeltaY(0);
+					}
 					
 					if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
 						ghost.moveGhost(ghostVector);
