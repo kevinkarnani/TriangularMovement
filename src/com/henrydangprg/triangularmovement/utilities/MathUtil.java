@@ -6,6 +6,10 @@ public class MathUtil {
 	public static double calcSpeed(double start, double end, double time) {
         return (end - start) / time;
     }
+	
+	public static double pythagorean(double a, double b) {
+		return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+	}
 
     public static double distanceBetweenPoints(Coordinate coord1, Coordinate coord2) {
         return Math.sqrt(Math.pow(coord2.getX() - coord1.getX(), 2) + Math.pow(coord2.getY() - coord1.getY(), 2));
