@@ -24,10 +24,23 @@ import javafx.stage.Stage;
 // Java 8 code
 public class Main extends Application {
 
+	private final double X_COORDINATE_FOR_TEXT = 520;
+	private final double Y_COORDINATE_FOR_DISTANCE_LABEL = 160;
+	private final double Y_COORDINATE_FOR_TOP_DISTANCE_LABEL = 180;
+	private final double Y_COORDINATE_FOR_LEFT_DISTANCE_LABEL = 200;
+	private final double Y_COORDINATE_FOR_RIGHT_DISTANCE_LABEL = 220;
+	private final double Y_COORDINATE_FOR_ENCODER_LABEL = 260;
+	private final double Y_COORDINATE_FOR_TOP_ENCODER_LABEL = 280;
+	private final double Y_COORDINATE_FOR_LEFT_ENCODER_LABEL = 300;
+	private final double Y_COORDINATE_FOR_RIGHT_ENCODER_LABEL = 320;
+	
 	public final double WIDTH = 800.0;
 	public final double HEIGHT = 600.0;
 	public final double MOVE_SPEED = 1.0;
 	public final double HEIGHT_SPEED = 0.25;
+	
+	private long delayInSimulation = 0;
+	private long pauseDuration = 20;
 
 	boolean goNorth, goSouth, goEast, goWest, goUp, goDown;
 
@@ -55,15 +68,16 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		
-		distanceLabel = new Text(520, 160, "Actual Distance from Motors:");
-		topDistance = new Text(520, 180, "Distance from Top: x");
-		leftDistance = new Text(520, 200, "Distance from Left: x");
-		rightDistance = new Text(520, 220, "Distance from Right: x");
+		distanceLabel = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_DISTANCE_LABEL, "Actual Distance from Motors");
+		topDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_TOP_DISTANCE_LABEL, "Distance from Top: x");
+		leftDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_LEFT_DISTANCE_LABEL, "Distance from Left: x");
+		rightDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_RIGHT_DISTANCE_LABEL, "Distance from Right: x");
 		
-		encoderLabel = new Text(520, 260, "Encoder Values:");
-		topEncoderDisplay = new Text(520, 280, "Top Encoder: x");
-		leftEncoderDisplay = new Text(520, 300, "Left Encoder: x");
-		rightEncoderDisplay = new Text(520, 320, "Right Encoder: x");
+		encoderLabel = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_ENCODER_LABEL, "Encoder Values");
+		topEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_TOP_ENCODER_LABEL, "Top Encoder: x");
+		leftEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_LEFT_ENCODER_LABEL, "Left Encoder: x");
+		rightEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_RIGHT_ENCODER_LABEL, "Right Encoder: x");
+
 
 		triangle = new Triangle();
 		
@@ -211,7 +225,7 @@ public class Main extends Application {
 					leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
 					rightEncoderDisplay.setText("Right Encoder: " + rightMotor.getEncoderValue());
 			  }
-		}, 0, 20);
+		}, delayInSimulation, pauseDuration);
 		
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
