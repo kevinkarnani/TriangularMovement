@@ -1,7 +1,5 @@
 package com.henrydangprg.triangularmovement.application;
 
-import java.util.Timer;
-
 import com.henrydangprg.triangularmovement.component.Encoder;
 import com.henrydangprg.triangularmovement.component.Ghost;
 import com.henrydangprg.triangularmovement.component.Motor;
@@ -14,10 +12,8 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 // Java 8 code
@@ -51,9 +47,13 @@ public class Main extends Application {
 
 		triangle = new Triangle();
 
-		topMotor = new Motor(triangle.getTopVertex(), topMotorEncoder);
-		leftMotor = new Motor(triangle.getLeftVertex(), leftMotorEncoder);
-		rightMotor = new Motor(triangle.getRightVertex(), rightMotorEncoder);
+		topMotor = new Motor(topMotorEncoder);
+		leftMotor = new Motor(leftMotorEncoder);
+		rightMotor = new Motor(rightMotorEncoder);
+		
+		topMotor.setPosition(triangle.getTopVertex());
+		leftMotor.setPosition(triangle.getLeftVertex());
+		rightMotor.setPosition(triangle.getRightVertex());
 
 		ghost = new Ghost(topMotor, leftMotor, rightMotor);
 		ghost.resetToRight();

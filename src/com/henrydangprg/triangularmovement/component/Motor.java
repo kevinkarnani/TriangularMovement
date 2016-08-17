@@ -12,13 +12,16 @@ public class Motor {
 	private Encoder encoder;
 	private final double constant = 100.0/60.0;
 	
-	public Motor(Coordinate pos, Encoder encoder){
+	public Motor(Encoder encoder){
+		this.encoder = encoder;
+	}
+	
+	public void setPosition(Coordinate pos) {
 		motorCoord = pos;
 		motor.setRadius(10);
 		motor.setCenterX(motorCoord.getX());
 		motor.setCenterY(motorCoord.getY());
 		motor.setFill(Color.GRAY);
-		this.encoder = encoder;
 	}
 	
 	public void rotate(MotorValues value){
