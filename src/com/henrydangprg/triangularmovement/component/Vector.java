@@ -1,49 +1,74 @@
 package com.henrydangprg.triangularmovement.component;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import com.henrydangprg.triangularmovement.utilities.MathUtil;
 
 public class Vector {
 
-	private ArrayList<Double> vector;
-	private final double lengthOfVector;
-
-	public Vector(double lengthOfVector) {
-		this.lengthOfVector = lengthOfVector;
-		this.vector = new ArrayList<Double>();
+	private double deltaX, deltaY, deltaZ;
+	private double magnitude, angle;
+	
+	public Vector() {
+		this.deltaX = 0;
+		this.deltaY = 0;
+		this.deltaZ = 0;
+		this.magnitude = 0;
+		this.angle = 0;
 	}
-
-	public double length() {
-		return lengthOfVector;
+	
+	public Vector(double deltaX, double deltaY, double deltaZ) {
+		this.deltaX = deltaX;
+		this.deltaY = deltaY;
+		this.deltaZ = deltaZ;
+		this.magnitude = MathUtil.pythagorean(deltaX, deltaY);
+		this.angle = Math.atan2(deltaY, deltaX);
 	}
-
-	public double dot(Vector that) {
-		if (this.length() != that.length()) {
-			throw new IllegalArgumentException("Component does not match");
-		}
-		double sum = 0.0;
-		for (int i = 0; i < lengthOfVector; i++) {
-			sum = sum + this.vector.get(i) * that.vector.get(i);
-		}
-		return sum;
+	
+	public void setDeltaX(double deltaX) {
+		this.deltaX = deltaX;
 	}
-
-	public Vector times(double factor) {
-		Vector c = new Vector(lengthOfVector);
-		for (int i = 0; i < lengthOfVector; i++) {
-			c.vector.add((double) i);
-		}
-		return c;
+	
+	public void setDeltaY(double deltaY) {
+		this.deltaY = deltaY;
 	}
-
-	public double magnitude() {
-		return Math.sqrt(this.dot(this));
+	
+	public void setDeltaZ(double deltaZ) {
+		this.deltaZ = deltaZ;
 	}
-
-	public Vector direction() {
-		if (this.magnitude() == 0.0) {
-			throw new RuntimeException("You just created a zero vector.");
-		}
-		return this.times(1.0 / this.magnitude());
+	
+	public void setDeltaXYZ(double deltaX, double deltaY, double deltaZ) {
+		this.deltaX = deltaX;
+		this.deltaY = deltaY;
+		this.deltaZ = deltaZ;
+	}
+	
+	public double getDeltaX() {
+		return deltaX;
+	}
+	
+	public double getDeltaY() {
+		return deltaY;
+	}
+	
+	public double getDeltaZ() {
+		return deltaZ;
+	}
+	
+	public double[] getDeltaXYZ() {
+		double[] delta = { deltaX, deltaY, deltaZ };
+		return delta;
+	}
+	
+	public double getMagnitude() {
+		return magnitude;
+    }
+	
+	public double getAngle() {
+		return angle;
+	}
+	
+	public void resetVector() {
+		this.deltaX = 0;
+		this.deltaY = 0;
+		this.deltaZ = 0;
 	}
 }
