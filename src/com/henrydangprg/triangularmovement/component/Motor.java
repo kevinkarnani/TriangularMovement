@@ -12,8 +12,8 @@ public class Motor {
 	private Encoder encoder;
 	private final double constant = 100.0/60.0;
 	
-	public Motor(double[] pos, Encoder encoder){
-		motorCoord = new Coordinate(pos[0], pos[1]);
+	public Motor(Coordinate pos, Encoder encoder){
+		motorCoord = pos;
 		motor.setRadius(10);
 		motor.setCenterX(motorCoord.getX());
 		motor.setCenterY(motorCoord.getY());

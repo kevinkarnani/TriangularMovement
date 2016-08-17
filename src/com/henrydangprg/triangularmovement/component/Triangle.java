@@ -21,18 +21,18 @@ public class Triangle {
 		triangle.setFill(Color.WHITE);
 	}
 	
-	public double[] getTopVertex() {
-		double coord[] = { TOP_VERTEX_X, TOP_VERTEX_Y };
+	public Coordinate getTopVertex() {
+		Coordinate coord = new Coordinate(TOP_VERTEX_X, TOP_VERTEX_Y);
 		return coord;
 	}
 	
-	public double[] getLeftVertex() {
-		double coord[] = { LEFT_VERTEX_X, LEFT_VERTEX_Y };
+	public Coordinate getLeftVertex() {
+		Coordinate coord = new Coordinate(LEFT_VERTEX_X, LEFT_VERTEX_Y);
 		return coord;
 	}
 	
-	public double[] getRightVertex() {
-		double coord[] = { RIGHT_VERTEX_X, RIGHT_VERTEX_Y };
+	public Coordinate getRightVertex() {
+		Coordinate coord = new Coordinate(RIGHT_VERTEX_X, RIGHT_VERTEX_Y);
 		return coord;
 	}
 	
