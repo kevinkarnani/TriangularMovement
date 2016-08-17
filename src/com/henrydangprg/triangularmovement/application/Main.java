@@ -6,6 +6,7 @@ import com.henrydangprg.triangularmovement.component.Encoder;
 import com.henrydangprg.triangularmovement.component.Ghost;
 import com.henrydangprg.triangularmovement.component.Motor;
 import com.henrydangprg.triangularmovement.component.Triangle;
+import com.henrydangprg.triangularmovement.component.Vector;
 import com.henrydangprg.triangularmovement.component.Wire;
 
 import javafx.animation.AnimationTimer;
@@ -13,6 +14,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -23,14 +25,17 @@ public class Main extends Application {
 
 	public final double WIDTH = 800;
 	public final double HEIGHT = 600;
+	public final double MOVE_SPEED = 1;
+	public final double HEIGHT_SPEED = 0.25;
 
-	boolean goNorth, goSouth, goEast, goWest;
+	boolean goNorth, goSouth, goEast, goWest, goUp, goDown;
 
 	private Encoder topMotorEncoder, leftMotorEncoder, rightMotorEncoder;
 	private Motor topMotor, leftMotor, rightMotor;
 	private Triangle triangle;
 	private Ghost ghost;
 	private Wire wireA, wireB, wireC;
+	private Vector ghostVector;
 
 	/**
 	 * Launches the program
@@ -60,6 +65,8 @@ public class Main extends Application {
 		wireA.attachFrom(topMotor.getMotorCoordinate());
 		wireB.attachFrom(leftMotor.getMotorCoordinate());
 		wireC.attachFrom(rightMotor.getMotorCoordinate());
+		
+		ghostVector = new Vector();
 
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
 				wireA.getLine(), wireB.getLine(), wireC.getLine(),
@@ -88,6 +95,12 @@ public class Main extends Application {
 				case RIGHT:
 					goEast = true;
 					break;
+				case Z:
+					goUp = true;
+					break;
+				case X:
+					goDown = true;
+					break;
 				}
 			}
 		});
@@ -108,28 +121,52 @@ public class Main extends Application {
 				case RIGHT:
 					goEast = false;
 					break;
+				case Z:
+					goUp = false;
+					break;
+				case X:
+					goDown = false;
+					break;
 				}
 			}
 		});
 
-		Timer timer = new Timer() {
+		AnimationTimer timer = new AnimationTimer() {
+			@Override
 			public void handle(long now) {
-				double deltaOfX = 0, deltaOfY = 0, coordinateDelta = .155;
 
 				if (goNorth) {
-					deltaOfY -= coordinateDelta;
+					ghostVector.setDeltaY(MOVE_SPEED);
 				}
 				if (goSouth) {
-					deltaOfY += coordinateDelta;
+					ghostVector.setDeltaY(-MOVE_SPEED);
 				}
 				if (goEast) {
-					deltaOfX += coordinateDelta;
+					ghostVector.setDeltaX(MOVE_SPEED);
 				}
 				if (goWest) {
-					deltaOfX -= coordinateDelta;
+					ghostVector.setDeltaX(-MOVE_SPEED);
 				}
+				if (goUp) {
+					ghostVector.setDeltaZ(HEIGHT_SPEED);
+				}
+				if (goDown) {
+					ghostVector.setDeltaZ(-HEIGHT_SPEED);
+				}
+				
+				if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
+					ghost.moveGhost(ghostVector);
+				}
+				
+				wireA.attachTo(ghost.getCoordinate());
+				wireB.attachTo(ghost.getCoordinate());
+				wireC.attachTo(ghost.getCoordinate());
+				
+				ghostVector.resetVector();
 			}
 		};
+		
+		timer.start();
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();

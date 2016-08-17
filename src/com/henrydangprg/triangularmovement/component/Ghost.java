@@ -11,7 +11,7 @@ public class Ghost {
 
 	private Circle ghostRepresentation;
 	
-	private Coordinate coord;
+	private Coordinate ghostCoord;
 	
 	private static double TOP_SIZE = 10;
 	
@@ -19,33 +19,55 @@ public class Ghost {
 		this.motorLeft = motorLeft;
 		this.motorTop = motorTop;
 		this.motorRight = motorRight;
-		coord = new Coordinate();
+		ghostCoord = new Coordinate();
 		ghostRepresentation = new Circle(); 
 		ghostRepresentation.setRadius(TOP_SIZE);
 		ghostRepresentation.setFill(Color.CHOCOLATE);
 	}
 	
 	public Coordinate getPosition(){
-		return coord;
+		return ghostCoord;
 	}
 	
 	public Circle getGhost() {
 		return ghostRepresentation;
 	}
 
-	public void setPosition() {
+	public void setPosition(double x, double y, double z) {
+		ghostCoord.setX(x);
+		ghostCoord.setY(y);
+		ghostCoord.setZ(z);
+		this.updatePosition();
+	}
+	
+	public void moveGhost(Vector vector) {
+		ghostCoord.setX(ghostCoord.getX() + vector.getDeltaX());
+		ghostCoord.setY(ghostCoord.getY() - vector.getDeltaY());
+		ghostCoord.setZ(ghostCoord.getZ() + vector.getDeltaZ());
+		this.updatePosition();
+	}
+	
+	public Coordinate getNextCoordinate(Vector vector) {
+		Coordinate coord = new Coordinate(ghostCoord.getX() + vector.getDeltaX(),
+										  ghostCoord.getY() - vector.getDeltaY(),
+										  ghostCoord.getZ() + vector.getDeltaZ());
+		return coord;
 	}
 	
 	public void resetToRight() {
-		coord.setX(motorRight.getMotorCoordinate().getX());
-		coord.setY(motorRight.getMotorCoordinate().getY());
-		coord.setZ(motorRight.getMotorCoordinate().getZ());
-		ghostRepresentation.setCenterX(coord.getX());
-		ghostRepresentation.setCenterY(coord.getY());
-		ghostRepresentation.setRadius(TOP_SIZE);
+		ghostCoord.setX(motorRight.getMotorCoordinate().getX());
+		ghostCoord.setY(motorRight.getMotorCoordinate().getY());
+		ghostCoord.setZ(motorRight.getMotorCoordinate().getZ());
+		this.updatePosition();
+	}
+	
+	public void updatePosition() {
+		ghostRepresentation.setCenterX(ghostCoord.getX());
+		ghostRepresentation.setCenterY(ghostCoord.getY());
+		ghostRepresentation.setRadius(TOP_SIZE + ghostCoord.getZ());
 	}
 
 	public Coordinate getCoordinate(){
-		return coord;
+		return ghostCoord;
 	}
 }
