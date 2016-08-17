@@ -51,7 +51,7 @@ public class Main extends Application {
 		rightMotor = new Motor(triangle.getRightVertex(), rightMotorEncoder);
 
 		ghost = new Ghost(topMotor, leftMotor, rightMotor);
-		ghost.resetToCenter();
+		ghost.resetToRight();
 
 		wireA = new Wire(ghost);
 		wireB = new Wire(ghost);
@@ -60,8 +60,6 @@ public class Main extends Application {
 		wireA.attachFrom(topMotor.getMotorPosition());
 		wireB.attachFrom(leftMotor.getMotorPosition());
 		wireC.attachFrom(rightMotor.getMotorPosition());
-
-		ghost.resetToCenter();
 
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
 				wireA.getLine(), wireB.getLine(), wireC.getLine(),
