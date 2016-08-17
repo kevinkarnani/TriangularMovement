@@ -1,5 +1,8 @@
 package com.henrydangprg.triangularmovement.application;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.henrydangprg.triangularmovement.component.Encoder;
 import com.henrydangprg.triangularmovement.component.Ghost;
 import com.henrydangprg.triangularmovement.component.Motor;
@@ -37,6 +40,8 @@ public class Main extends Application {
 	private Text distanceLabel, encoderLabel;
 	private Text topDistance, leftDistance, rightDistance;
 	private Text topEncoderDisplay, leftEncoderDisplay, rightEncoderDisplay;
+	
+	Timer timer = new Timer();
 
 	/**
 	 * Launches the program
@@ -154,60 +159,58 @@ public class Main extends Application {
 			}
 		});
 
-		AnimationTimer timer = new AnimationTimer() {
-			@Override
-			public void handle(long now) {
-
-				if (goNorth) {
-					ghostVector.setDeltaY(MOVE_SPEED);
-				}
-				if (goSouth) {
-					ghostVector.setDeltaY(-MOVE_SPEED);
-				}
-				if (goEast) {
-					ghostVector.setDeltaX(MOVE_SPEED);
-				}
-				if (goWest) {
-					ghostVector.setDeltaX(-MOVE_SPEED);
-				}
-				if (goUp) {
-					ghostVector.setDeltaZ(HEIGHT_SPEED);
-				}
-				if (goDown) {
-					ghostVector.setDeltaZ(-HEIGHT_SPEED);
-				}
+		timer.scheduleAtFixedRate(new TimerTask() {
+			  @Override
+			  public void run() {
+				  if (goNorth) {
+						ghostVector.setDeltaY(MOVE_SPEED);
+					}
+					if (goSouth) {
+						ghostVector.setDeltaY(-MOVE_SPEED);
+					}
+					if (goEast) {
+						ghostVector.setDeltaX(MOVE_SPEED);
+					}
+					if (goWest) {
+						ghostVector.setDeltaX(-MOVE_SPEED);
+					}
+					if (goUp) {
+						ghostVector.setDeltaZ(HEIGHT_SPEED);
+					}
+					if (goDown) {
+						ghostVector.setDeltaZ(-HEIGHT_SPEED);
+					}
+					
+					if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
+						ghost.moveGhost(ghostVector);
+					}
+					
+					wireA.attachTo(ghost.getCoordinate());
+					wireB.attachTo(ghost.getCoordinate());
+					wireC.attachTo(ghost.getCoordinate());
+					
+					ghostVector.resetVector();
+					
+					topDistance.setText("Distance from Top: " + 
+							MathUtil.distFromPoints(topMotor.getMotorCoordinate(), ghost.getCoordinate()));
+					leftDistance.setText("Distance from Left: " + 
+							MathUtil.distFromPoints(leftMotor.getMotorCoordinate(), ghost.getCoordinate()));
+					rightDistance.setText("Distance from Right: " + 
+							MathUtil.distFromPoints(rightMotor.getMotorCoordinate(), ghost.getCoordinate()));
 				
-				if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
-					ghost.moveGhost(ghostVector);
-				}
-				
-				wireA.attachTo(ghost.getCoordinate());
-				wireB.attachTo(ghost.getCoordinate());
-				wireC.attachTo(ghost.getCoordinate());
-				
-				ghostVector.resetVector();
-				
-				topDistance.setText("Distance from Top: " + 
-						MathUtil.distFromPoints(topMotor.getMotorCoordinate(), ghost.getCoordinate()));
-				leftDistance.setText("Distance from Left: " + 
-						MathUtil.distFromPoints(leftMotor.getMotorCoordinate(), ghost.getCoordinate()));
-				rightDistance.setText("Distance from Right: " + 
-						MathUtil.distFromPoints(rightMotor.getMotorCoordinate(), ghost.getCoordinate()));
-			
-				topEncoderDisplay.setText("Top Encoder: " + topMotor.getEncoderValue());
-				leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
-				rightEncoderDisplay.setText("Right Encoder: " + rightMotor.getEncoderValue());
-			}
-		};
+					topEncoderDisplay.setText("Top Encoder: " + topMotor.getEncoderValue());
+					leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
+					rightEncoderDisplay.setText("Right Encoder: " + rightMotor.getEncoderValue());
+			  }
+		}, 0, 20);
 		
-		timer.start();
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
 
 	}
 
-	private void movementHandler(KeyEvent event) {
+	private void movementHandler() {
 		
 	}
 }
