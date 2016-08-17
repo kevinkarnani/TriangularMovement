@@ -24,9 +24,9 @@ import javafx.stage.Stage;
 // Java 8 code
 public class Main extends Application {
 
-	public final double WIDTH = 800;
-	public final double HEIGHT = 600;
-	public final double MOVE_SPEED = 1;
+	public final double WIDTH = 800.0;
+	public final double HEIGHT = 600.0;
+	public final double MOVE_SPEED = 1.0;
 	public final double HEIGHT_SPEED = 0.25;
 
 	boolean goNorth, goSouth, goEast, goWest, goUp, goDown;
@@ -55,12 +55,12 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		
-		distanceLabel = new Text(520, 160, "Actual Distance from Motors");
+		distanceLabel = new Text(520, 160, "Actual Distance from Motors:");
 		topDistance = new Text(520, 180, "Distance from Top: x");
 		leftDistance = new Text(520, 200, "Distance from Left: x");
 		rightDistance = new Text(520, 220, "Distance from Right: x");
 		
-		encoderLabel = new Text(520, 260, "Encoder Values");
+		encoderLabel = new Text(520, 260, "Encoder Values:");
 		topEncoderDisplay = new Text(520, 280, "Top Encoder: x");
 		leftEncoderDisplay = new Text(520, 300, "Left Encoder: x");
 		rightEncoderDisplay = new Text(520, 320, "Right Encoder: x");
