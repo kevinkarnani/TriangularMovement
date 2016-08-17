@@ -186,6 +186,9 @@ public class Main extends Application {
 					if(goNorth && goSouth){
 						ghostVector.setDeltaY(0);
 					}
+					if(goEast && goWest){
+						ghostVector.setDeltaX(0);
+					}
 					
 					if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
 						ghost.moveGhost(ghostVector);
