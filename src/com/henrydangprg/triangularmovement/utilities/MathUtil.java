@@ -11,8 +11,9 @@ public class MathUtil {
 		return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 	}
 
-    public static double distanceBetweenPoints(Coordinate coord1, Coordinate coord2) {
-        return Math.sqrt(Math.pow(coord2.getX() - coord1.getX(), 2) + Math.pow(coord2.getY() - coord1.getY(), 2));
+    public static double distFromPoints(Coordinate coord1, Coordinate coord2) {
+        return Math.sqrt(Math.pow(coord2.getX() - coord1.getX(), 2) + Math.pow(coord2.getY() - coord1.getY(), 2) +
+        				 Math.pow(coord2.getZ() - coord1.getZ(), 2));
     }
 
     public static double findSlope(Coordinate coord1, Coordinate coord2) {
