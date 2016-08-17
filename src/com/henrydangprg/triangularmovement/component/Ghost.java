@@ -13,13 +13,15 @@ public class Ghost {
 	
 	private Coordinate coord;
 	
+	private static double TOP_SIZE = 10;
+	
 	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
 		this.motorLeft = motorLeft;
 		this.motorTop = motorTop;
 		this.motorRight = motorRight;
 		coord = new Coordinate();
 		ghostRepresentation = new Circle(); 
-		ghostRepresentation.setRadius(10);
+		ghostRepresentation.setRadius(TOP_SIZE);
 		ghostRepresentation.setFill(Color.CHOCOLATE);
 	}
 	
@@ -35,10 +37,12 @@ public class Ghost {
 	}
 	
 	public void resetToRight() {
-		coord.setX(motorRight.getMotorPosition().getX());
-		coord.setY(motorRight.getMotorPosition().getY());
+		coord.setX(motorRight.getMotorCoordinate().getX());
+		coord.setY(motorRight.getMotorCoordinate().getY());
+		coord.setZ(motorRight.getMotorCoordinate().getZ());
 		ghostRepresentation.setCenterX(coord.getX());
 		ghostRepresentation.setCenterY(coord.getY());
+		ghostRepresentation.setRadius(TOP_SIZE);
 	}
 
 	public Coordinate getCoordinate(){

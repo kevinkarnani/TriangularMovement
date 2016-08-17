@@ -7,10 +7,13 @@ public class Triangle {
 
 	public static final double LEFT_VERTEX_X = 0.0;
 	public static final double LEFT_VERTEX_Y = 400.0;
+	public static final double LEFT_VERTEX_Z = 0.0;
 	public static final double TOP_VERTEX_X = 250.0;
 	public static final double TOP_VERTEX_Y = 0.0;
+	public static final double TOP_VERTEX_Z = 0.0;
 	public static final double RIGHT_VERTEX_X = 500.0;
 	public static final double RIGHT_VERTEX_Y = 400.0;
+	public static final double RIGHT_VERTEX_Z = 0.0;
 	private Polygon triangle;
 	
 	public Triangle(){
@@ -22,17 +25,17 @@ public class Triangle {
 	}
 	
 	public Coordinate getTopVertex() {
-		Coordinate coord = new Coordinate(TOP_VERTEX_X, TOP_VERTEX_Y);
+		Coordinate coord = new Coordinate(TOP_VERTEX_X, TOP_VERTEX_Y, TOP_VERTEX_Z);
 		return coord;
 	}
 	
 	public Coordinate getLeftVertex() {
-		Coordinate coord = new Coordinate(LEFT_VERTEX_X, LEFT_VERTEX_Y);
+		Coordinate coord = new Coordinate(LEFT_VERTEX_X, LEFT_VERTEX_Y, LEFT_VERTEX_Z);
 		return coord;
 	}
 	
 	public Coordinate getRightVertex() {
-		Coordinate coord = new Coordinate(RIGHT_VERTEX_X, RIGHT_VERTEX_Y);
+		Coordinate coord = new Coordinate(RIGHT_VERTEX_X, RIGHT_VERTEX_Y, RIGHT_VERTEX_Z);
 		return coord;
 	}
 	

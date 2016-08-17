@@ -57,9 +57,9 @@ public class Main extends Application {
 		wireB = new Wire(ghost);
 		wireC = new Wire(ghost);
 
-		wireA.attachFrom(topMotor.getMotorPosition());
-		wireB.attachFrom(leftMotor.getMotorPosition());
-		wireC.attachFrom(rightMotor.getMotorPosition());
+		wireA.attachFrom(topMotor.getMotorCoordinate());
+		wireB.attachFrom(leftMotor.getMotorCoordinate());
+		wireC.attachFrom(rightMotor.getMotorCoordinate());
 
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
 				wireA.getLine(), wireB.getLine(), wireC.getLine(),

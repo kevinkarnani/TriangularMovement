@@ -29,7 +29,7 @@ public class Motor {
 		return motor;
 	}
 	
-	public Coordinate getMotorPosition() {
+	public Coordinate getMotorCoordinate() {
 		return motorCoord;
 	}
 	

@@ -4,12 +4,14 @@ public class Coordinate {
 
 	private double x;
 	private double y;
+	private double z;
 	
 	public Coordinate() {}
 
-	public Coordinate(double x, double y) {
+	public Coordinate(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
+		this.z = z;
 	}
 
 	public double getX() {
@@ -28,12 +30,20 @@ public class Coordinate {
 		this.y = y;
 	}
 	
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	}
+	
 	/**
-	 * Return the coordinate's x and y pair as an array.
-	 * @return Returns a double[] with the coordinates in the form [x, y]
+	 * Return the coordinate's x, y, and z as an array.
+	 * @return Returns a double[] with the coordinates in the form [x, y, z]
 	 */
-	public double[] getXY(){
-		double[] coordinates = {this.x, this.y};
+	public double[] getXYZ(){
+		double[] coordinates = {this.x, this.y, this.z};
 		return coordinates;
 	}
 }
