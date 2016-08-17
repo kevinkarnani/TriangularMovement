@@ -12,8 +12,8 @@ public class Motor {
 	private Encoder encoder;
 	private final double constant = 100.0/60.0;
 	
-	public Motor(Encoder encoder){
-		this.encoder = encoder;
+	public Motor(){
+		encoder = new Encoder();
 	}
 	
 	public void setPosition(Coordinate pos) {
@@ -24,12 +24,16 @@ public class Motor {
 		motor.setFill(Color.GRAY);
 	}
 	
-	public void rotate(MotorValues value){
-		encoder.setValue(encoder.getValue() + constant);
+	public void rotate(double speed){
+		encoder.setValue(this.getEncoderValue() + speed);
 	}
 	
 	public Circle getMotorShape() {
 		return motor;
+	}
+	
+	public Encoder getEncoder() {
+		return encoder;
 	}
 	
 	public Coordinate getMotorCoordinate() {
