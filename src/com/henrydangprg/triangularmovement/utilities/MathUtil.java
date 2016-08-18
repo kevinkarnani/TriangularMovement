@@ -3,6 +3,12 @@ package com.henrydangprg.triangularmovement.utilities;
 import com.henrydangprg.triangularmovement.component.Coordinate;
 
 public class MathUtil {
+	public static <T extends Comparable<T>> T range(T val, T min, T max){
+		if (val.compareTo(min) < 0) return min;
+		else if(val.compareTo(max) > 0) return max;
+		else return val;
+	}
+	
 	public static double calcSpeed(double start, double end, double time) {
         return (end - start) / time;
     }
