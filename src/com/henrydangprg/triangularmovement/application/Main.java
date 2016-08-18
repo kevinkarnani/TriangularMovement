@@ -3,15 +3,14 @@ package com.henrydangprg.triangularmovement.application;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.henrydangprg.triangularmovement.component.Encoder;
 import com.henrydangprg.triangularmovement.component.Ghost;
+import com.henrydangprg.triangularmovement.component.Input;
 import com.henrydangprg.triangularmovement.component.Motor;
 import com.henrydangprg.triangularmovement.component.Triangle;
-import com.henrydangprg.triangularmovement.component.Vector;
 import com.henrydangprg.triangularmovement.component.Wire;
+import com.henrydangprg.triangularmovement.utilities.Vector;
 import com.henrydangprg.triangularmovement.utilities.MathUtil;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -41,8 +40,8 @@ public class Main extends Application {
 	
 	private long delayInSimulation = 0;
 	private long pauseDuration = 20;
-
-	boolean goNorth, goSouth, goEast, goWest, goUp, goDown;
+	
+	Input input = new Input();
 
 	private Motor topMotor, leftMotor, rightMotor;
 	private Triangle triangle;
@@ -122,107 +121,68 @@ public class Main extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case UP:
-					goNorth = true;
-					break;
-				case DOWN:
-					goSouth = true;
-					break;
-				case LEFT:
-					goWest = true;
-					break;
-				case RIGHT:
-					goEast = true;
-					break;
-				case Z:
-					goUp = true;
-					break;
-				case X:
-					goDown = true;
-					break;
-				}
+				input.setKeyState(event.getCode().toString(), true);
 			}
 		});
 		
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case UP:
-					goNorth = false;
-					break;
-				case DOWN:
-					goSouth = false;
-					break;
-				case LEFT:
-					goWest = false;
-					break;
-				case RIGHT:
-					goEast = false;
-					break;
-				case Z:
-					goUp = false;
-					break;
-				case X:
-					goDown = false;
-					break;
-				}
+				input.setKeyState(event.getCode().toString(), false);
 			}
 		});
 
 		timer.scheduleAtFixedRate(new TimerTask() {
-			  @Override
-			  public void run() {
-				  if (goNorth) {
-						ghostVector.setDeltaY(MOVE_SPEED);
-					}
-					if (goSouth) {
-						ghostVector.setDeltaY(-MOVE_SPEED);
-					}
-					if (goEast) {
-						ghostVector.setDeltaX(MOVE_SPEED);
-					}
-					if (goWest) {
-						ghostVector.setDeltaX(-MOVE_SPEED);
-					}
-					if (goUp) {
-						ghostVector.setDeltaZ(HEIGHT_SPEED);
-					}
-					if (goDown) {
-						ghostVector.setDeltaZ(-HEIGHT_SPEED);
-					}
-					if(goEast && goWest){
-						ghostVector.setDeltaX(0);
-					}
-					if(goNorth && goSouth){
-						ghostVector.setDeltaY(0);
-					}
-					if(goEast && goWest){
-						ghostVector.setDeltaX(0);
-					}
-					
-					if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
-						ghost.moveGhost(ghostVector);
-					}
-					
-					wireA.attachTo(ghost.getCoordinate());
-					wireB.attachTo(ghost.getCoordinate());
-					wireC.attachTo(ghost.getCoordinate());
-					
-					ghostVector.resetVector();
-					
+			@Override
+			public void run() {
+				if (input.getKeyState("UP")) {
+					ghostVector.setDeltaY(MOVE_SPEED);
+				}
+				if (input.getKeyState("DOWN")) {
+					ghostVector.setDeltaY(-MOVE_SPEED);
+				}
+				if (input.getKeyState("RIGHT")) {
+					ghostVector.setDeltaX(MOVE_SPEED);
+				}
+				if (input.getKeyState("LEFT")) {
+					ghostVector.setDeltaX(-MOVE_SPEED);
+				}
+				if (input.getKeyState("Z")) {
+					ghostVector.setDeltaZ(HEIGHT_SPEED);
+				}
+				if (input.getKeyState("X")) {
+					ghostVector.setDeltaZ(-HEIGHT_SPEED);
+				}
+				if (input.isClashing("LEFT", "RIGHT")){
+					ghostVector.setDeltaX(0);
+				}
+				if (input.isClashing("UP", "DOWN")){
+					ghostVector.setDeltaY(0);
+				}
+				
+				if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
+					ghost.moveGhost(ghostVector);
+				}
+				
+				ghostVector.resetVector();
+				  
+				wireA.attachTo(ghost.getCoordinate());
+				wireB.attachTo(ghost.getCoordinate());
+				wireC.attachTo(ghost.getCoordinate());
+				  
+				if (input.isKeyPressed()) {
 					topDistance.setText("Distance from Top: " + 
 							MathUtil.distFromPoints(topMotor.getCoordinate(), ghost.getCoordinate()));
 					leftDistance.setText("Distance from Left: " + 
 							MathUtil.distFromPoints(leftMotor.getCoordinate(), ghost.getCoordinate()));
 					rightDistance.setText("Distance from Right: " + 
 							MathUtil.distFromPoints(rightMotor.getCoordinate(), ghost.getCoordinate()));
-				
+					
 					topEncoderDisplay.setText("Top Encoder: " + topMotor.getEncoderValue());
 					leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
 					rightEncoderDisplay.setText("Right Encoder: " + rightMotor.getEncoderValue());
-			  }
+				}
+			}
 		}, delayInSimulation, pauseDuration);
 		
 		stage.setTitle("Simulation");
