@@ -1,5 +1,7 @@
 package com.henrydangprg.triangularmovement.component;
 
+import com.henrydangprg.triangularmovement.utilities.Vector;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
