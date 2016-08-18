@@ -16,6 +16,7 @@ public class Triangle {
 	public static final double RIGHT_VERTEX_X = 500.0;
 	public static final double RIGHT_VERTEX_Y = 400.0;
 	public static final double RIGHT_VERTEX_Z = 0.0;
+	public static final double DEPTH_LIMIT = -10;
 	private double leftToTopSlope, topToRightSlope, bottomYIntercept;
 	private double topToRightYIntercept;
 	
@@ -30,15 +31,16 @@ public class Triangle {
 		
 		leftToTopSlope = MathUtil.findSlope(this.getLeftVertex(), this.getTopVertex());
 		topToRightSlope = -leftToTopSlope;
+		
 		topToRightYIntercept = MathUtil.findYIntercept(topToRightSlope, getTopVertex());
-		bottomYIntercept = 400;
+		bottomYIntercept = LEFT_VERTEX_Y;
 	}
 	
 	public boolean isInBounds(Coordinate coord) {
-		if (MathUtil.checkInequality(leftToTopSlope, 400, coord, true) &&
+		if (MathUtil.checkInequality(leftToTopSlope, bottomYIntercept, coord, true) &&
             MathUtil.checkInequality(topToRightSlope, topToRightYIntercept, coord, true) &&
             MathUtil.checkInequality(0, bottomYIntercept, coord, false) &&
-            coord.getZ() >= -10 && coord.getZ() <= 0) {
+            coord.getZ() >= DEPTH_LIMIT && coord.getZ() <= 0) {
 			return true;
 		}
 		

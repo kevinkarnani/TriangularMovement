@@ -4,14 +4,12 @@ import javafx.scene.shape.Line;
 
 public class Wire {
 
-	Ghost ghost;
 	Line line;
 
-	public Wire(Ghost ghost) {
-		this.ghost = ghost;
+	public Wire(Coordinate startCoord) {
 		line = new Line();
-		line.setEndX(ghost.getCoordinate().getX());
-		line.setEndY(ghost.getCoordinate().getY());
+		line.setEndX(startCoord.getX());
+		line.setEndY(startCoord.getY());
 	}
 
 	public Line getLine() {

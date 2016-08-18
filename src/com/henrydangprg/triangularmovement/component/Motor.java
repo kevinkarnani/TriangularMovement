@@ -16,8 +16,8 @@ public class Motor {
 		encoder = new Encoder();
 	}
 	
-	public void setPosition(Coordinate pos) {
-		motorCoord = pos;
+	public void setPosition(Coordinate motorCoord) {
+		this.motorCoord = motorCoord;
 		motor.setRadius(10);
 		motor.setCenterX(motorCoord.getX());
 		motor.setCenterY(motorCoord.getY());
@@ -36,7 +36,7 @@ public class Motor {
 		return encoder;
 	}
 	
-	public Coordinate getMotorCoordinate() {
+	public Coordinate getCoordinate() {
 		return motorCoord;
 	}
 	

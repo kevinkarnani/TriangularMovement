@@ -55,9 +55,9 @@ public class Ghost {
 	}
 	
 	public void resetToRight() {
-		ghostCoord.setX(motorRight.getMotorCoordinate().getX());
-		ghostCoord.setY(motorRight.getMotorCoordinate().getY());
-		ghostCoord.setZ(motorRight.getMotorCoordinate().getZ());
+		ghostCoord.setX(motorRight.getCoordinate().getX());
+		ghostCoord.setY(motorRight.getCoordinate().getY());
+		ghostCoord.setZ(motorRight.getCoordinate().getZ());
 		this.updatePosition();
 	}
 	

@@ -78,7 +78,6 @@ public class Main extends Application {
 		leftEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_LEFT_ENCODER_LABEL, "Left Encoder: x");
 		rightEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_RIGHT_ENCODER_LABEL, "Right Encoder: x");
 
-
 		triangle = new Triangle();
 		
 		topMotor = new Motor();
@@ -92,13 +91,13 @@ public class Main extends Application {
 		ghost = new Ghost(topMotor, leftMotor, rightMotor);
 		ghost.resetToRight();
 
-		wireA = new Wire(ghost);
-		wireB = new Wire(ghost);
-		wireC = new Wire(ghost);
+		wireA = new Wire(ghost.getCoordinate());
+		wireB = new Wire(ghost.getCoordinate());
+		wireC = new Wire(ghost.getCoordinate());
 
-		wireA.attachFrom(topMotor.getMotorCoordinate());
-		wireB.attachFrom(leftMotor.getMotorCoordinate());
-		wireC.attachFrom(rightMotor.getMotorCoordinate());
+		wireA.attachFrom(topMotor.getCoordinate());
+		wireB.attachFrom(leftMotor.getCoordinate());
+		wireC.attachFrom(rightMotor.getCoordinate());
 		
 		ghostVector = new Vector();
 
@@ -110,9 +109,9 @@ public class Main extends Application {
 				topDistance, leftDistance, rightDistance,
 				topEncoderDisplay, leftEncoderDisplay, rightEncoderDisplay);
 		
-		topMotor.getEncoder().setValue(MathUtil.distFromPoints(topMotor.getMotorCoordinate(), ghost.getCoordinate()));
-		leftMotor.getEncoder().setValue(MathUtil.distFromPoints(leftMotor.getMotorCoordinate(), ghost.getCoordinate()));
-		rightMotor.getEncoder().setValue(MathUtil.distFromPoints(rightMotor.getMotorCoordinate(), ghost.getCoordinate()));
+		topMotor.getEncoder().setValue(MathUtil.distFromPoints(topMotor.getCoordinate(), ghost.getCoordinate()));
+		leftMotor.getEncoder().setValue(MathUtil.distFromPoints(leftMotor.getCoordinate(), ghost.getCoordinate()));
+		rightMotor.getEncoder().setValue(MathUtil.distFromPoints(rightMotor.getCoordinate(), ghost.getCoordinate()));
 
 		topMotor.getMotorShape().toBack();
 		leftMotor.getMotorShape().toBack();
@@ -146,7 +145,6 @@ public class Main extends Application {
 			}
 		});
 		
-
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -215,11 +213,11 @@ public class Main extends Application {
 					ghostVector.resetVector();
 					
 					topDistance.setText("Distance from Top: " + 
-							MathUtil.distFromPoints(topMotor.getMotorCoordinate(), ghost.getCoordinate()));
+							MathUtil.distFromPoints(topMotor.getCoordinate(), ghost.getCoordinate()));
 					leftDistance.setText("Distance from Left: " + 
-							MathUtil.distFromPoints(leftMotor.getMotorCoordinate(), ghost.getCoordinate()));
+							MathUtil.distFromPoints(leftMotor.getCoordinate(), ghost.getCoordinate()));
 					rightDistance.setText("Distance from Right: " + 
-							MathUtil.distFromPoints(rightMotor.getMotorCoordinate(), ghost.getCoordinate()));
+							MathUtil.distFromPoints(rightMotor.getCoordinate(), ghost.getCoordinate()));
 				
 					topEncoderDisplay.setText("Top Encoder: " + topMotor.getEncoderValue());
 					leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
@@ -231,9 +229,5 @@ public class Main extends Application {
 		stage.setScene(scene);
 		stage.show();
 
-	}
-
-	private void movementHandler() {
-		
 	}
 }
