@@ -24,12 +24,6 @@ public class MathUtil {
         return -slope * coord.getX() + coord.getY();
     }
 
-    public static double[] findVectorComponents(double magnitude, double angle) {
-        double[] vectorComponents = { magnitude * Math.cos(angle),
-                                      magnitude * Math.sin(angle) };
-        return vectorComponents;
-    }
-
     public static boolean checkInequality(double slope, double yintercept, Coordinate coord, boolean isMore) {
         if (isMore) {
             if (coord.getY() >= slope * coord.getX() + yintercept) return true;

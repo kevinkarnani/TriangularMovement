@@ -23,6 +23,14 @@ public class Vector {
 		this.angle = Math.atan2(deltaY, deltaX);
 	}
 	
+	public Vector(double magnitude, double angle) {
+		this.magnitude = magnitude;
+		this.angle = angle;
+		this.deltaX = magnitude * Math.cos(angle);
+		this.deltaY = magnitude * Math.sin(angle);
+		this.deltaZ = 0;
+	}
+	
 	public void setDeltaX(double deltaX) {
 		this.deltaX = deltaX;
 	}
@@ -70,5 +78,7 @@ public class Vector {
 		this.deltaX = 0;
 		this.deltaY = 0;
 		this.deltaZ = 0;
+		this.magnitude = 0;
+		this.angle = 0;
 	}
 }
