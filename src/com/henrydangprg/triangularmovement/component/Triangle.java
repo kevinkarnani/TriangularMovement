@@ -1,5 +1,6 @@
 package com.henrydangprg.triangularmovement.component;
 
+import com.henrydangprg.triangularmovement.utilities.Coordinate;
 import com.henrydangprg.triangularmovement.utilities.MathUtil;
 
 import javafx.scene.paint.Color;
@@ -7,40 +8,54 @@ import javafx.scene.shape.Polygon;
 
 public class Triangle {
 
-	public static final double LEFT_VERTEX_X = 0.0;
-	public static final double LEFT_VERTEX_Y = 400.0;
-	public static final double LEFT_VERTEX_Z = 0.0;
-	public static final double TOP_VERTEX_X = 250.0;
-	public static final double TOP_VERTEX_Y = 0.0;
-	public static final double TOP_VERTEX_Z = 0.0;
-	public static final double RIGHT_VERTEX_X = 500.0;
-	public static final double RIGHT_VERTEX_Y = 400.0;
-	public static final double RIGHT_VERTEX_Z = 0.0;
-	public static final double DEPTH_LIMIT = -10;
+	private Coordinate leftVertex;
+	private Coordinate topVertex;
+	private Coordinate rightVertex;
+	private double depth;
 	private double leftToTopSlope, topToRightSlope, bottomYIntercept;
-	private double topToRightYIntercept;
+	private double leftToTopYIntercept, topToRightYIntercept;
 	
 	private Polygon triangle;
 	
-	public Triangle(){
+	public Triangle(double length, double width, double depth){
+		leftVertex = new Coordinate(0, width, 0);
+		topVertex = new Coordinate(length/2, 0, 0);
+		rightVertex = new Coordinate(length, width, 0);
+		this.depth = -depth;
+		
 		triangle = new Polygon();
+		
+		this.setInequalities();
+		
 		triangle.getPoints().addAll(
-				new Double[] { LEFT_VERTEX_X, LEFT_VERTEX_Y, TOP_VERTEX_X,
-						TOP_VERTEX_Y, RIGHT_VERTEX_X, RIGHT_VERTEX_Y });
+				new Double[] { leftVertex.getX(), leftVertex.getY(), topVertex.getX(),
+						topVertex.getY(), rightVertex.getX(), rightVertex.getY() });
 		triangle.setFill(Color.WHITE);
-		
+	}
+	
+	public void shiftTriangle(double shiftX, double shiftY) {
+		leftVertex = new Coordinate(leftVertex.getX() + shiftX, leftVertex.getY() + shiftY, 0);
+		rightVertex = new Coordinate(rightVertex.getX() + shiftX, rightVertex.getY() + shiftY, 0);
+		topVertex = new Coordinate(topVertex.getX() + shiftX, topVertex.getY() + shiftY, 0);
+
+		triangle.relocate(shiftX, shiftY);
+		this.setInequalities();
+	}
+	
+	public void setInequalities() {
 		leftToTopSlope = MathUtil.findSlope(this.getLeftVertex(), this.getTopVertex());
+		leftToTopYIntercept = MathUtil.findYIntercept(leftToTopSlope, this.getLeftVertex());
 		topToRightSlope = -leftToTopSlope;
-		
-		topToRightYIntercept = MathUtil.findYIntercept(topToRightSlope, getTopVertex());
-		bottomYIntercept = LEFT_VERTEX_Y;
+	
+		topToRightYIntercept = MathUtil.findYIntercept(topToRightSlope, this.getTopVertex());
+		bottomYIntercept = leftVertex.getY();
 	}
 	
 	public boolean isInBounds(Coordinate coord) {
-		if (MathUtil.checkInequality(leftToTopSlope, bottomYIntercept, coord, true) &&
+		if (MathUtil.checkInequality(leftToTopSlope, leftToTopYIntercept, coord, true) &&
             MathUtil.checkInequality(topToRightSlope, topToRightYIntercept, coord, true) &&
             MathUtil.checkInequality(0, bottomYIntercept, coord, false) &&
-            coord.getZ() >= DEPTH_LIMIT && coord.getZ() <= 0) {
+            coord.getZ() >= depth && coord.getZ() <= 0) {
 			return true;
 		}
 		
@@ -48,18 +63,19 @@ public class Triangle {
 	}
 	
 	public Coordinate getTopVertex() {
-		Coordinate coord = new Coordinate(TOP_VERTEX_X, TOP_VERTEX_Y, TOP_VERTEX_Z);
-		return coord;
+		return topVertex;
 	}
 	
 	public Coordinate getLeftVertex() {
-		Coordinate coord = new Coordinate(LEFT_VERTEX_X, LEFT_VERTEX_Y, LEFT_VERTEX_Z);
-		return coord;
+		return leftVertex;
 	}
 	
 	public Coordinate getRightVertex() {
-		Coordinate coord = new Coordinate(RIGHT_VERTEX_X, RIGHT_VERTEX_Y, RIGHT_VERTEX_Z);
-		return coord;
+		return rightVertex;
+	}
+	
+	public double getDepth() {
+		return -depth;
 	}
 	
 	public void sendToBack(){
@@ -70,4 +86,3 @@ public class Triangle {
 		return triangle;
 	}
 }
-
