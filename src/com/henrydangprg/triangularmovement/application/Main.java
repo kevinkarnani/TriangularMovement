@@ -4,14 +4,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.henrydangprg.triangularmovement.component.Ghost;
-import com.henrydangprg.triangularmovement.component.Input;
 import com.henrydangprg.triangularmovement.component.Motor;
 import com.henrydangprg.triangularmovement.component.Triangle;
 import com.henrydangprg.triangularmovement.component.Wire;
+import com.henrydangprg.triangularmovement.utilities.Input;
 import com.henrydangprg.triangularmovement.utilities.Vector;
-import com.henrydangprg.triangularmovement.utilities.MathUtil;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -24,24 +24,21 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private final double X_COORDINATE_FOR_TEXT = 520;
-	private final double Y_COORDINATE_FOR_DISTANCE_LABEL = 160;
-	private final double Y_COORDINATE_FOR_TOP_DISTANCE_LABEL = 180;
-	private final double Y_COORDINATE_FOR_LEFT_DISTANCE_LABEL = 200;
-	private final double Y_COORDINATE_FOR_RIGHT_DISTANCE_LABEL = 220;
-	private final double Y_COORDINATE_FOR_ENCODER_LABEL = 260;
-	private final double Y_COORDINATE_FOR_TOP_ENCODER_LABEL = 280;
-	private final double Y_COORDINATE_FOR_LEFT_ENCODER_LABEL = 300;
-	private final double Y_COORDINATE_FOR_RIGHT_ENCODER_LABEL = 320;
+	private final double Y_COORDINATE_FOR_DISTANCE_LABEL = 80;
+	private final double Y_COORDINATE_FOR_ENCODER_LABEL = 180;
+	private final double Y_COORDINATE_FOR_GHOST_LABEL = 280;
+	private final double Y_COORDINATE_FOR_MOTOR_SPEED_LABEL = 360;
+	private final double Y_COORDINATE_FOR_CONTROL_LABEL = 440;
 	
-	public final double WIDTH = 800.0;
-	public final double HEIGHT = 600.0;
-	public final double MOVE_SPEED = 1.0;
-	public final double HEIGHT_SPEED = 0.25;
+	private final double WIDTH = 800.0;
+	private final double HEIGHT = 600.0;
+	private final double HEIGHT_SPEED = 1.5;
+	private double moveSpeed = 1;
 	
 	private long delayInSimulation = 0;
-	private long pauseDuration = 20;
+	private long pauseDuration = 1000/60;
 	
-	Input input = new Input();
+	private Input input = new Input();
 
 	private Motor topMotor, leftMotor, rightMotor;
 	private Triangle triangle;
@@ -49,9 +46,11 @@ public class Main extends Application {
 	private Wire wireA, wireB, wireC;
 	private Vector ghostVector;
 	
-	private Text distanceLabel, encoderLabel;
-	private Text topDistance, leftDistance, rightDistance;
-	private Text topEncoderDisplay, leftEncoderDisplay, rightEncoderDisplay;
+	private Text distanceDisplay;
+	private Text encoderDisplay;
+	private Text ghostCoordDisplay;
+	private Text motorSpeedDisplay;
+	private Text controlDisplay;
 	
 	Timer timer = new Timer();
 
@@ -67,17 +66,30 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		
-		distanceLabel = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_DISTANCE_LABEL, "Actual Distance from Motors");
-		topDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_TOP_DISTANCE_LABEL, "Distance from Top: x");
-		leftDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_LEFT_DISTANCE_LABEL, "Distance from Left: x");
-		rightDistance = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_RIGHT_DISTANCE_LABEL, "Distance from Right: x");
+		distanceDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_DISTANCE_LABEL, "Actual Distance from Motors"
+				+ "\nDistance from Top: x"
+				+ "\nDistance from Left: x"
+				+ "\nDistance from Right: x");
 		
-		encoderLabel = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_ENCODER_LABEL, "Encoder Values");
-		topEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_TOP_ENCODER_LABEL, "Top Encoder: x");
-		leftEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_LEFT_ENCODER_LABEL, "Left Encoder: x");
-		rightEncoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_RIGHT_ENCODER_LABEL, "Right Encoder: x");
+		encoderDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_ENCODER_LABEL, "Encoder Values" 
+				+ "\nTop Encoder: x"
+				+ "\nLeft Encoder: x"
+				+ "\nRight Encoder: x");
 
-		triangle = new Triangle();
+		ghostCoordDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_GHOST_LABEL, "Ghost Coord: x, x, x");
+		
+		motorSpeedDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_MOTOR_SPEED_LABEL, "Top Motor Speed: x"
+				+ "\nLeft Motor Speed: x"
+				+ "\nRight Motor Speed: x");
+		
+		controlDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_CONTROL_LABEL, "Up: x"
+				+ "\nDown: x"
+				+ "\nLeft: x"
+				+ "\nRight: x"
+				+ "\nZ: x"
+				+ "\nX: x");
+		
+		triangle = new Triangle(300, 200, 100);
 		
 		topMotor = new Motor();
 		leftMotor = new Motor();
@@ -87,30 +99,32 @@ public class Main extends Application {
 		leftMotor.setPosition(triangle.getLeftVertex());
 		rightMotor.setPosition(triangle.getRightVertex());
 
-		ghost = new Ghost(topMotor, leftMotor, rightMotor);
+		ghost = new Ghost(leftMotor, topMotor, rightMotor);
+		ghost.setDepthLimit(triangle.getDepth());
 		ghost.resetToRight();
 
-		wireA = new Wire(ghost.getCoordinate());
-		wireB = new Wire(ghost.getCoordinate());
-		wireC = new Wire(ghost.getCoordinate());
+		wireA = new Wire();
+		wireB = new Wire();
+		wireC = new Wire();
 
 		wireA.attachFrom(topMotor.getCoordinate());
 		wireB.attachFrom(leftMotor.getCoordinate());
 		wireC.attachFrom(rightMotor.getCoordinate());
 		
 		ghostVector = new Vector();
+		
+		moveSpeed = topMotor.getMotorSpeed();
 
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
 				wireA.getLine(), wireB.getLine(), wireC.getLine(),
 				topMotor.getMotorShape(), leftMotor.getMotorShape(),
 				rightMotor.getMotorShape(),
-				distanceLabel, encoderLabel,
-				topDistance, leftDistance, rightDistance,
-				topEncoderDisplay, leftEncoderDisplay, rightEncoderDisplay);
+				distanceDisplay, encoderDisplay, ghostCoordDisplay,
+				motorSpeedDisplay, controlDisplay);
 		
-		topMotor.getEncoder().setValue(MathUtil.distFromPoints(topMotor.getCoordinate(), ghost.getCoordinate()));
-		leftMotor.getEncoder().setValue(MathUtil.distFromPoints(leftMotor.getCoordinate(), ghost.getCoordinate()));
-		rightMotor.getEncoder().setValue(MathUtil.distFromPoints(rightMotor.getCoordinate(), ghost.getCoordinate()));
+		topMotor.getEncoder().setValue(ghost.getDistanceFromTop());
+		leftMotor.getEncoder().setValue(ghost.getDistanceFromLeft());
+		rightMotor.getEncoder().setValue(ghost.getDistanceFromRight());
 
 		topMotor.getMotorShape().toBack();
 		leftMotor.getMotorShape().toBack();
@@ -131,63 +145,96 @@ public class Main extends Application {
 				input.setKeyState(event.getCode().toString(), false);
 			}
 		});
-
+		
 		timer.scheduleAtFixedRate(new TimerTask() {
-			@Override
 			public void run() {
-				if (input.getKeyState("UP")) {
-					ghostVector.setDeltaY(MOVE_SPEED);
-				}
-				if (input.getKeyState("DOWN")) {
-					ghostVector.setDeltaY(-MOVE_SPEED);
-				}
-				if (input.getKeyState("RIGHT")) {
-					ghostVector.setDeltaX(MOVE_SPEED);
-				}
-				if (input.getKeyState("LEFT")) {
-					ghostVector.setDeltaX(-MOVE_SPEED);
-				}
-				if (input.getKeyState("Z")) {
-					ghostVector.setDeltaZ(HEIGHT_SPEED);
-				}
-				if (input.getKeyState("X")) {
-					ghostVector.setDeltaZ(-HEIGHT_SPEED);
-				}
-				if (input.isClashing("LEFT", "RIGHT")){
-					ghostVector.setDeltaX(0);
-				}
-				if (input.isClashing("UP", "DOWN")){
-					ghostVector.setDeltaY(0);
-				}
-				
-				if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
-					ghost.moveGhost(ghostVector);
-				}
-				
-				ghostVector.resetVector();
-				  
-				wireA.attachTo(ghost.getCoordinate());
-				wireB.attachTo(ghost.getCoordinate());
-				wireC.attachTo(ghost.getCoordinate());
-				  
-				if (input.isKeyPressed()) {
-					topDistance.setText("Distance from Top: " + 
-							MathUtil.distFromPoints(topMotor.getCoordinate(), ghost.getCoordinate()));
-					leftDistance.setText("Distance from Left: " + 
-							MathUtil.distFromPoints(leftMotor.getCoordinate(), ghost.getCoordinate()));
-					rightDistance.setText("Distance from Right: " + 
-							MathUtil.distFromPoints(rightMotor.getCoordinate(), ghost.getCoordinate()));
-					
-					topEncoderDisplay.setText("Top Encoder: " + topMotor.getEncoderValue());
-					leftEncoderDisplay.setText("Left Encoder: " + leftMotor.getEncoderValue());
-					rightEncoderDisplay.setText("Right Encoder: " + rightMotor.getEncoderValue());
-				}
+				Platform.runLater(new Runnable() {
+					public void run() {
+						if (input.isInputPressed()) {
+							if (input.getKeyState("LEFT")) ghostVector.setDeltaX(-moveSpeed);
+							if (input.getKeyState("RIGHT")) ghostVector.setDeltaX(moveSpeed);
+							if (input.getKeyState("UP")) ghostVector.setDeltaY(-moveSpeed);
+							if (input.getKeyState("DOWN")) ghostVector.setDeltaY(moveSpeed);
+							if (input.isClashing("UP", "LEFT")) {
+								ghostVector.setDeltaX(-moveSpeed * Math.cos(Math.toRadians(45)));
+								ghostVector.setDeltaY(-moveSpeed * Math.sin(Math.toRadians(45)));
+							}
+							if (input.isClashing("UP", "RIGHT")) {
+								ghostVector.setDeltaX(moveSpeed * Math.cos(Math.toRadians(45)));
+								ghostVector.setDeltaY(-moveSpeed * Math.sin(Math.toRadians(45)));
+							}
+							if (input.isClashing("DOWN", "LEFT")) {
+								ghostVector.setDeltaX(-moveSpeed * Math.cos(Math.toRadians(45)));
+								ghostVector.setDeltaY(moveSpeed * Math.sin(Math.toRadians(45)));
+							}
+							if (input.isClashing("DOWN", "RIGHT")) {
+								ghostVector.setDeltaX(moveSpeed * Math.cos(Math.toRadians(45)));
+								ghostVector.setDeltaY(moveSpeed * Math.sin(Math.toRadians(45)));
+							}
+							if (input.isClashing("UP", "DOWN") || input.isClashing("LEFT", "RIGHT")) {
+								ghostVector.setDeltaX(0);
+								ghostVector.setDeltaY(0);
+							}
+			
+							if (input.getKeyState("Z")) ghostVector.setDeltaZ(HEIGHT_SPEED);
+							if (input.getKeyState("X")) ghostVector.setDeltaZ(-HEIGHT_SPEED);
+						}
+						
+						ghostVector.multiplyVector(2);
+						
+						if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
+							ghostVector.multiplyVector(0.5);
+							ghost.calcMotorSpeeds(ghostVector);
+							ghost.setPosition(ghost.getPosition());
+						} else {
+							ghostVector.multiplyVector(0);
+							ghost.calcMotorSpeeds(ghostVector);
+							ghost.setPosition(ghost.getPosition());
+						}
+						
+						topMotor.rotate();
+						leftMotor.rotate();
+						rightMotor.rotate();
+						
+						distanceDisplay.setText("Actual Distance from Motors"
+								+ "\nDistance from Top: " + ghost.getDistanceFromTop()
+								+ "\nDistance from Left: " + ghost.getDistanceFromLeft()
+								+ "\nDistance from Right: " + ghost.getDistanceFromRight());
+						
+						encoderDisplay.setText("Encoder Values" 
+								+ "\nTop Encoder: " + topMotor.getEncoderValue()
+								+ "\nLeft Encoder: " + leftMotor.getEncoderValue()
+								+ "\nRight Encoder: " + rightMotor.getEncoderValue());
+						
+						ghostCoordDisplay.setText("Ghost Coord: " + ghost.getCoordinate().getX() + "\n "
+								                           + ghost.getCoordinate().getY() + "\n "
+								                           + ghost.getCoordinate().getZ());
+						
+						motorSpeedDisplay.setText("Top Motor Speed: " + topMotor.getSpeed()
+								+ "\nLeft Motor Speed: " + leftMotor.getSpeed()
+								+ "\nRight Motor Speed: " + rightMotor.getSpeed());
+						
+						controlDisplay.setText("Up: " + input.getKeyState("UP")
+								+ "\nDown: " + input.getKeyState("DOWN")
+								+ "\nLeft: " + input.getKeyState("LEFT")
+								+ "\nRight: " + input.getKeyState("RIGHT")
+								+ "\nZ: " + input.getKeyState("Z")
+								+ "\nX: " + input.getKeyState("X"));
+						
+						ghostVector.resetVector();
+						
+						wireA.attachTo(ghost.getCoordinate());
+						wireB.attachTo(ghost.getCoordinate());
+						wireC.attachTo(ghost.getCoordinate());
+					}
+				});
 			}
 		}, delayInSimulation, pauseDuration);
 		
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
-
+		
+		stage.setOnCloseRequest(event -> System.exit(0));
 	}
 }
