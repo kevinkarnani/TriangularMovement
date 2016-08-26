@@ -1,34 +1,47 @@
 package com.henrydangprg.triangularmovement.component;
 
+import com.henrydangprg.triangularmovement.utilities.Coordinate;
+import com.henrydangprg.triangularmovement.utilities.MathUtil;
+import com.henrydangprg.triangularmovement.utilities.Ratio;
+import com.henrydangprg.triangularmovement.utilities.Trilateration;
 import com.henrydangprg.triangularmovement.utilities.Vector;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Ghost {
+	
+	private Ratio motorRatio;
 
-	private Motor motorLeft;
-	private Motor motorTop;
-	private Motor motorRight;
-
+	private Motor leftMotor;
+	private Motor topMotor;
+	private Motor rightMotor;
+	
 	private Circle ghostRepresentation;
 	
 	private Coordinate ghostCoord;
 	
-	private static double TOP_SIZE = 10.0;
+	private Trilateration trilateration;
 	
-	public Ghost(Motor motorLeft, Motor motorTop, Motor motorRight){
-		this.motorLeft = motorLeft;
-		this.motorTop = motorTop;
-		this.motorRight = motorRight;
+	private double depthLimit;
+	
+	public Ghost(Motor leftMotor, Motor topMotor, Motor rightMotor){
+		this.leftMotor = leftMotor;
+		this.topMotor = topMotor;
+		this.rightMotor = rightMotor;
+		motorRatio = new Ratio();
 		ghostCoord = new Coordinate();
 		ghostRepresentation = new Circle(); 
-		ghostRepresentation.setRadius(TOP_SIZE);
+		ghostRepresentation.setRadius(depthLimit);
 		ghostRepresentation.setFill(Color.CHOCOLATE);
+		trilateration = new Trilateration(leftMotor.getCoordinate(), 
+										  rightMotor.getCoordinate(), 
+										  topMotor.getCoordinate());
 	}
 	
-	public Coordinate getPosition(){
-		return ghostCoord;
+	public void setDepthLimit(double depth) {
+		depthLimit = depth;
+		ghostRepresentation.setRadius(depthLimit);
 	}
 	
 	public Circle getGhost() {
@@ -42,34 +55,94 @@ public class Ghost {
 		this.updatePosition();
 	}
 	
+	public void setPosition(Coordinate coord) {
+		ghostCoord.setX(coord.getX());
+		ghostCoord.setY(coord.getY());
+		ghostCoord.setZ(coord.getZ());
+		this.updatePosition();
+	}
+	
 	public void moveGhost(Vector vector) {
-		ghostCoord.setX(ghostCoord.getX() + vector.getDeltaX());
-		ghostCoord.setY(ghostCoord.getY() - vector.getDeltaY());
-		ghostCoord.setZ(ghostCoord.getZ() + vector.getDeltaZ());
+		this.setPosition(vector.addVector(this.getCoordinate(), vector));
 		this.updatePosition();
 	}
 	
 	public Coordinate getNextCoordinate(Vector vector) {
-		Coordinate coord = new Coordinate(ghostCoord.getX() + vector.getDeltaX(),
-										  ghostCoord.getY() - vector.getDeltaY(),
-										  ghostCoord.getZ() + vector.getDeltaZ());
-		return coord;
+		return vector.addVector(this.getCoordinate(), vector);
+	}
+	
+	public double getDistanceFromTop() {
+		return MathUtil.distFromPoints(topMotor.getCoordinate(), this.getCoordinate());
+	}
+	
+	public double getDistanceFromLeft() {
+		return MathUtil.distFromPoints(leftMotor.getCoordinate(), this.getCoordinate());
+	}
+
+	public double getDistanceFromRight() {
+		return MathUtil.distFromPoints(rightMotor.getCoordinate(), this.getCoordinate());
+	}
+	
+	public void calcMotorSpeeds(Vector vector) {
+		double topMotorSpeed =  MathUtil.calcSpeed(this.getDistanceFromTop(),
+				  				  				   MathUtil.distFromPoints(topMotor.getCoordinate(), this.getNextCoordinate(vector)),
+				  				  				   1);
+		double leftMotorSpeed = MathUtil.calcSpeed(this.getDistanceFromLeft(),
+				  								   MathUtil.distFromPoints(leftMotor.getCoordinate(), this.getNextCoordinate(vector)),
+				  								   1);
+		double rightMotorSpeed = MathUtil.calcSpeed(this.getDistanceFromRight(),
+				  				 					MathUtil.distFromPoints(rightMotor.getCoordinate(), this.getNextCoordinate(vector)),
+				  				 					1);
+		
+		if (topMotorSpeed != 0 && leftMotorSpeed != 0 && rightMotorSpeed != 0) {
+			motorRatio.add(topMotorSpeed, leftMotorSpeed, rightMotorSpeed);
+			motorRatio.calcRatio();
+			
+			motorRatio.amplifyRatio(1);
+			
+			topMotor.set(motorRatio.getRatio()[0]);
+			leftMotor.set(motorRatio.getRatio()[1]);
+			rightMotor.set(motorRatio.getRatio()[2]);
+		} else {
+			topMotor.set(0);
+			leftMotor.set(0);
+			rightMotor.set(0);
+		}
+	}
+	
+	public Coordinate getPosition() {
+		ghostCoord = trilateration.calcCoordIntersection(leftMotor.getEncoderValue(), 
+												   		 rightMotor.getEncoderValue(), 
+												 		 topMotor.getEncoderValue());
+		return ghostCoord;
 	}
 	
 	public void resetToRight() {
-		ghostCoord.setX(motorRight.getCoordinate().getX());
-		ghostCoord.setY(motorRight.getCoordinate().getY());
-		ghostCoord.setZ(motorRight.getCoordinate().getZ());
+		ghostCoord.setX(rightMotor.getCoordinate().getX());
+		ghostCoord.setY(rightMotor.getCoordinate().getY());
+		ghostCoord.setZ(rightMotor.getCoordinate().getZ());
 		this.updatePosition();
 	}
 	
 	public void updatePosition() {
 		ghostRepresentation.setCenterX(ghostCoord.getX());
 		ghostRepresentation.setCenterY(ghostCoord.getY());
-		ghostRepresentation.setRadius(TOP_SIZE + ghostCoord.getZ());
+		ghostRepresentation.setRadius(depthLimit + ghostCoord.getZ());
 	}
 
 	public Coordinate getCoordinate(){
 		return ghostCoord;
+	}
+	
+	public Motor getTopMotor() {
+		return topMotor;
+	}
+	
+	public Motor getLeftMotor() {
+		return topMotor;
+	}
+	
+	public Motor getRightMotor() {
+		return topMotor;
 	}
 }
