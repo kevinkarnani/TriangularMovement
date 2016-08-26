@@ -1,7 +1,5 @@
 package com.henrydangprg.triangularmovement.utilities;
 
-import com.henrydangprg.triangularmovement.component.Coordinate;
-
 public class MathUtil {
 	public static <T extends Comparable<T>> T range(T val, T min, T max){
 		if (val.compareTo(min) < 0) return min;
