@@ -31,6 +31,42 @@ public class Vector {
 		this.deltaZ = 0;
 	}
 	
+	public void findVectorComponents() {
+		this.deltaX = magnitude * Math.cos(angle);
+		this.deltaY = magnitude * Math.sin(angle);
+		this.deltaZ = 0;
+	}
+	
+	public void findVectorComponents(double magnitude, double angle) {
+		this.deltaX = magnitude * Math.cos(Math.toRadians(angle));
+		this.deltaY = magnitude * Math.sin(Math.toRadians(angle));
+		this.deltaZ = 0;
+	}
+	
+	public void calcVector(Coordinate coord1, Coordinate coord2) {
+		deltaX = coord2.getX() - coord1.getX();
+		deltaY = coord2.getY() - coord1.getY();
+		deltaZ = coord2.getZ() - coord1.getZ();
+	}
+	
+	public Coordinate addVector(Coordinate coord, Vector vector) {
+		return coord = new Coordinate(coord.getX() + vector.getDeltaX(),
+				coord.getY() + vector.getDeltaY(),
+				coord.getZ() + vector.getDeltaZ());
+	}
+	
+	public Coordinate subtractVector(Coordinate coord, Vector vector) {
+		return coord = new Coordinate(coord.getX() - vector.getDeltaX(),
+				coord.getY() - vector.getDeltaY(),
+				coord.getZ() - vector.getDeltaZ());
+	}
+	
+	public void multiplyVector(double amplify) {
+		this.setDeltaX(this.getDeltaX() * amplify);
+		this.setDeltaY(this.getDeltaY() * amplify);
+		this.setDeltaZ(this.getDeltaZ() * amplify);
+	}
+	
 	public void setDeltaX(double deltaX) {
 		this.deltaX = deltaX;
 	}
