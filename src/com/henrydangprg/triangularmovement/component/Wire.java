@@ -1,15 +1,15 @@
 package com.henrydangprg.triangularmovement.component;
 
+import com.henrydangprg.triangularmovement.utilities.Coordinate;
+
 import javafx.scene.shape.Line;
 
 public class Wire {
 
 	Line line;
 
-	public Wire(Coordinate startCoord) {
+	public Wire() {
 		line = new Line();
-		line.setEndX(startCoord.getX());
-		line.setEndY(startCoord.getY());
 	}
 
 	public Line getLine() {
