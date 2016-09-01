@@ -32,8 +32,8 @@ public class Main extends Application {
 	
 	private final double WIDTH = 800.0;
 	private final double HEIGHT = 600.0;
-	private final double HEIGHT_SPEED = 1.5;
-	private double moveSpeed = 1;
+	private final double HEIGHT_SPEED = 3;
+	private final double VECTOR_EPSILON = 3;
 	
 	private long delayInSimulation = 0;
 	private long pauseDuration = 1000/60;
@@ -66,6 +66,7 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		
+		//Sets the text displays to show data.
 		distanceDisplay = new Text(X_COORDINATE_FOR_TEXT, Y_COORDINATE_FOR_DISTANCE_LABEL, "Actual Distance from Motors"
 				+ "\nDistance from Top: x"
 				+ "\nDistance from Left: x"
@@ -89,32 +90,38 @@ public class Main extends Application {
 				+ "\nZ: x"
 				+ "\nX: x");
 		
-		triangle = new Triangle(300, 200, 100);
+		//Creates a triangle with custom dimensions
+		triangle = new Triangle(500, 400, 100);
 		
+		//Creates 3 motor objects of the skycam
 		topMotor = new Motor();
 		leftMotor = new Motor();
 		rightMotor = new Motor();
 		
+		//Sets the 3 motor position to each vertex of the triangle
 		topMotor.setPosition(triangle.getTopVertex());
 		leftMotor.setPosition(triangle.getLeftVertex());
 		rightMotor.setPosition(triangle.getRightVertex());
 
+		//Creates a ghost object and resets its position to the right vertex
 		ghost = new Ghost(leftMotor, topMotor, rightMotor);
 		ghost.setDepthLimit(triangle.getDepth());
 		ghost.resetToRight();
 
+		//Creates new wires to attach to the ghost
 		wireA = new Wire();
 		wireB = new Wire();
 		wireC = new Wire();
 
+		//Attaches the wires to each of the 3 motors
 		wireA.attachFrom(topMotor.getCoordinate());
 		wireB.attachFrom(leftMotor.getCoordinate());
 		wireC.attachFrom(rightMotor.getCoordinate());
 		
+		//Creates a vector variable used to calculate the ghost movement
 		ghostVector = new Vector();
-		
-		moveSpeed = topMotor.getMotorSpeed();
 
+		//Creates a layout to show the simulation on screen
 		Group layout = new Group(triangle.getTriangle(), ghost.getGhost(),
 				wireA.getLine(), wireB.getLine(), wireC.getLine(),
 				topMotor.getMotorShape(), leftMotor.getMotorShape(),
@@ -122,16 +129,20 @@ public class Main extends Application {
 				distanceDisplay, encoderDisplay, ghostCoordDisplay,
 				motorSpeedDisplay, controlDisplay);
 		
+		//Sets the starting encoder values of the ghost.
 		topMotor.getEncoder().setValue(ghost.getDistanceFromTop());
 		leftMotor.getEncoder().setValue(ghost.getDistanceFromLeft());
 		rightMotor.getEncoder().setValue(ghost.getDistanceFromRight());
 
+		//Moves the motor shape to the back to not overlap the triangle shape.
 		topMotor.getMotorShape().toBack();
 		leftMotor.getMotorShape().toBack();
 		rightMotor.getMotorShape().toBack();
 
+		//Creates a window to show the simulation.
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.AQUAMARINE);
 
+		//Sets a button press to true when a button is press
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -139,6 +150,7 @@ public class Main extends Application {
 			}
 		});
 		
+		//Sets a button press to false when a button is press
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -146,30 +158,36 @@ public class Main extends Application {
 			}
 		});
 		
+		//Runs the simulation at 60 fps
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
 				Platform.runLater(new Runnable() {
 					public void run() {
+						//Uses arrow keys as dummy joystick values
 						if (input.isInputPressed()) {
-							if (input.getKeyState("LEFT")) ghostVector.setDeltaX(-moveSpeed);
-							if (input.getKeyState("RIGHT")) ghostVector.setDeltaX(moveSpeed);
-							if (input.getKeyState("UP")) ghostVector.setDeltaY(-moveSpeed);
-							if (input.getKeyState("DOWN")) ghostVector.setDeltaY(moveSpeed);
+							if (input.getKeyState("LEFT")) {
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 180);
+							}
+							if (input.getKeyState("RIGHT")) {
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 0);
+							}
+							if (input.getKeyState("UP")) {
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 270);
+							}
+							if (input.getKeyState("DOWN")) {
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 90);
+							}
 							if (input.isClashing("UP", "LEFT")) {
-								ghostVector.setDeltaX(-moveSpeed * Math.cos(Math.toRadians(45)));
-								ghostVector.setDeltaY(-moveSpeed * Math.sin(Math.toRadians(45)));
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 225);
 							}
 							if (input.isClashing("UP", "RIGHT")) {
-								ghostVector.setDeltaX(moveSpeed * Math.cos(Math.toRadians(45)));
-								ghostVector.setDeltaY(-moveSpeed * Math.sin(Math.toRadians(45)));
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 315);
 							}
 							if (input.isClashing("DOWN", "LEFT")) {
-								ghostVector.setDeltaX(-moveSpeed * Math.cos(Math.toRadians(45)));
-								ghostVector.setDeltaY(moveSpeed * Math.sin(Math.toRadians(45)));
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 135);
 							}
 							if (input.isClashing("DOWN", "RIGHT")) {
-								ghostVector.setDeltaX(moveSpeed * Math.cos(Math.toRadians(45)));
-								ghostVector.setDeltaY(moveSpeed * Math.sin(Math.toRadians(45)));
+								ghostVector.findVectorComponents(VECTOR_EPSILON, 45);
 							}
 							if (input.isClashing("UP", "DOWN") || input.isClashing("LEFT", "RIGHT")) {
 								ghostVector.setDeltaX(0);
@@ -180,22 +198,23 @@ public class Main extends Application {
 							if (input.getKeyState("X")) ghostVector.setDeltaZ(-HEIGHT_SPEED);
 						}
 						
-						ghostVector.multiplyVector(2);
-						
-						if (triangle.isInBounds(ghost.getNextCoordinate(ghostVector))) {
-							ghostVector.multiplyVector(0.5);
-							ghost.calcMotorSpeeds(ghostVector);
-							ghost.setPosition(ghost.getPosition());
-						} else {
+						//Calculates whether the next coordinate will move the ghost
+						//out of bounds. If it does, it will stop the ghost.
+						ghost.calcNextCoordinate(ghostVector);
+						if (!triangle.isInBounds(ghost.getNextCoordinate())) {
 							ghostVector.multiplyVector(0);
-							ghost.calcMotorSpeeds(ghostVector);
-							ghost.setPosition(ghost.getPosition());
 						}
+
+						//Sets the motor speeds and updates ghost
+						ghost.calcMotorSpeeds(ghostVector);
+						ghost.calibrate();
 						
+						//Constantly rotates the motors
 						topMotor.rotate();
 						leftMotor.rotate();
 						rightMotor.rotate();
 						
+						//Displays statistics for the simulation
 						distanceDisplay.setText("Actual Distance from Motors"
 								+ "\nDistance from Top: " + ghost.getDistanceFromTop()
 								+ "\nDistance from Left: " + ghost.getDistanceFromLeft()
@@ -221,8 +240,10 @@ public class Main extends Application {
 								+ "\nZ: " + input.getKeyState("Z")
 								+ "\nX: " + input.getKeyState("X"));
 						
+						//Resets the vector back to 0
 						ghostVector.resetVector();
 						
+						//Attaches the wire to the updated ghost position
 						wireA.attachTo(ghost.getCoordinate());
 						wireB.attachTo(ghost.getCoordinate());
 						wireC.attachTo(ghost.getCoordinate());
@@ -231,10 +252,12 @@ public class Main extends Application {
 			}
 		}, delayInSimulation, pauseDuration);
 		
+		//Shows the simulation on screen
 		stage.setTitle("Simulation");
 		stage.setScene(scene);
 		stage.show();
 		
+		//Closes the entire process to exit the application
 		stage.setOnCloseRequest(event -> System.exit(0));
 	}
 }
