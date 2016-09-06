@@ -2,6 +2,20 @@ package com.henrydangprg.triangularmovement.utilities;
 
 import com.henrydangprg.triangularmovement.utilities.MathUtil;
 
+/**
+ * A vector is a quantity that has a magnitude and direction.
+ * 
+ * <p>
+ * A vector is used to determine how much an object has moved
+ * from a starting point.
+ * 
+ * <p>
+ * If a magnitude and angle is given, it can be used to calculate
+ * the net change in x and y position through trigonometry.
+ * 
+ * If the x, y, and z component is given, it can be used to
+ * determine the magnitude and angle through trigonometry.
+ */
 public class Vector {
 
     private double deltaX, deltaY, deltaZ;
@@ -87,9 +101,9 @@ public class Vector {
      *            the second coordinate.
      */
     public void calcVector(Coordinate coord1, Coordinate coord2) {
-	deltaX = coord2.getX() - coord1.getX();
-	deltaY = coord2.getY() - coord1.getY();
-	deltaZ = coord2.getZ() - coord1.getZ();
+	this.deltaX = coord2.getX() - coord1.getX();
+	this.deltaY = coord2.getY() - coord1.getY();
+	this.deltaZ = coord2.getZ() - coord1.getZ();
     }
 
     /**
@@ -102,7 +116,7 @@ public class Vector {
      * @return a coordinate added by a vector.
      */
     public Coordinate addVector(Coordinate coord, Vector vector) {
-	return coord = new Coordinate(coord.getX() + vector.getDeltaX(), coord.getY() + vector.getDeltaY(),
+	return new Coordinate(coord.getX() + vector.getDeltaX(), coord.getY() + vector.getDeltaY(),
 		coord.getZ() + vector.getDeltaZ());
     }
 
@@ -116,7 +130,7 @@ public class Vector {
      * @return a coordinate subtracted by a vector.
      */
     public Coordinate subtractVector(Coordinate coord, Vector vector) {
-	return coord = new Coordinate(coord.getX() - vector.getDeltaX(), coord.getY() - vector.getDeltaY(),
+	return new Coordinate(coord.getX() - vector.getDeltaX(), coord.getY() - vector.getDeltaY(),
 		coord.getZ() - vector.getDeltaZ());
     }
 
@@ -181,34 +195,34 @@ public class Vector {
     /**
      * Returns the x component of this vector.
      * 
-     * @return a double of the x component.
+     * @return the x component as a double.
      */
     public double getDeltaX() {
-	return deltaX;
+	return this.deltaX;
     }
 
     /**
      * Returns the y component of this vector.
      * 
-     * @return a double of the y component.
+     * @return the y component as a double.
      */
     public double getDeltaY() {
-	return deltaY;
+	return this.deltaY;
     }
 
     /**
-     * Returns the z component of this vector.
+     * Returns the z component of the vector.
      * 
-     * @return a double of the z component.
+     * @return the z component as a double.
      */
     public double getDeltaZ() {
-	return deltaZ;
+	return this.deltaZ;
     }
 
     /**
      * Returns the x, y, z components as an array.
      * 
-     * @return returns a double[] of the vector as [x, y, z]
+     * @return returns a double[] of the vector as [x, y, z].
      */
     public double[] getDeltaXYZ() {
 	double[] delta = { deltaX, deltaY, deltaZ };
@@ -218,19 +232,19 @@ public class Vector {
     /**
      * Returns the magnitude of this vector.
      * 
-     * @return a double of the magnitude.
+     * @return the magnitude of the vector as a double.
      */
     public double getMagnitude() {
-	return magnitude;
+	return this.magnitude;
     }
 
     /**
      * Returns the angle of this vector.
      * 
-     * @return the angle of this vector in degrees.
+     * @return the angle of the vector in degrees.
      */
     public double getAngle() {
-	return angle;
+	return this.angle;
     }
 
     /**

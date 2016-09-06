@@ -3,6 +3,15 @@ package com.henrydangprg.triangularmovement.utilities;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The input class stores a true/false value depending if
+ * a button is pressed or released.
+ * 
+ * <p>
+ * There are additional methods which return a boolean whether a button is
+ * pressed, is any button is pressed, or if the arrow keys are pressed.
+ * It can also detect whether two buttons are pressed at the same time.
+ */
 public class Input {
     private Map<String, Boolean> input = new HashMap<String, Boolean>();
 

@@ -9,6 +9,16 @@ import com.henrydangprg.triangularmovement.utilities.Vector;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * The ghost is an object in the Christmas play is attached to 
+ * three motors, which are positioned as an isosceles triangle.
+ * 
+ * <p>
+ * The ghost is moved by moving the three motors at the same time.
+ * It does so by finding the desired coordinate to move to and calculates
+ * the speed for each motor to spin for. It calculates its actual coordinate
+ * with {@link Trilateration} to find its actual coordinate, and the cycle repeats.
+ */
 public class Ghost {
 
     private Ratio motorRatio;
@@ -32,11 +42,11 @@ public class Ghost {
      * position. Creates a visual representation of the ghost.
      * 
      * @param leftMotor
-     *            the left motor which the ghost is attached to.
+     *            the left motor which the ghost is hanging from.
      * @param topMotor
-     *            the top motor which the ghost is attached to.
+     *            the top motor which the ghost is hanging from.
      * @param rightMotor
-     *            the right motor which the ghost is attached to.
+     *            the right motor which the ghost is hanging from.
      */
     public Ghost(Motor leftMotor, Motor topMotor, Motor rightMotor) {
 	this.leftMotor = leftMotor;
@@ -61,7 +71,7 @@ public class Ghost {
      *            the depth limit of the ghost.
      */
     public void setDepthLimit(double depth) {
-	depthLimit = depth;
+	this.depthLimit = depth;
 	ghostRepresentation.setRadius(depthLimit);
     }
 
@@ -71,7 +81,7 @@ public class Ghost {
      * @return the circle object representing the ghost.
      */
     public Circle getGhost() {
-	return ghostRepresentation;
+	return this.ghostRepresentation;
     }
 
     /**
@@ -105,7 +115,7 @@ public class Ghost {
     /**
      * Returns the next calculated coordinate of the ghost.
      * 
-     * @return the next Coordinate of the ghost.
+     * @return the next {@link Coordinate} of the ghost.
      */
     public Coordinate getNextCoordinate() {
 	return nextGhostCoord;
@@ -141,24 +151,28 @@ public class Ghost {
 		MathUtil.distFromPoints(rightMotor.getCoordinate(), this.getNextCoordinate()), 1);
 	motorRatio.add(topMotorSpeed, leftMotorSpeed, rightMotorSpeed);
 	motorRatio.amplifyRatio(1);
+	
+	double newTopMotorSpeed = motorRatio.getRatio()[0];
+	double newLeftMotorSpeed = motorRatio.getRatio()[1];
+	double newRightMotorSpeed = motorRatio.getRatio()[2];
 
-	topMotor.set(motorRatio.getRatio()[0]);
-	leftMotor.set(motorRatio.getRatio()[1]);
-	rightMotor.set(motorRatio.getRatio()[2]);
+	topMotor.set(newTopMotorSpeed);
+	leftMotor.set(newLeftMotorSpeed);
+	rightMotor.set(newRightMotorSpeed);
     }
 
     /**
      * Finds the coordinates of the ghost based off the encoder values.
      */
     public void calibrate() {
-	this.ghostCoord = trilateration.calcPosition(leftMotor.getEncoderValue(), rightMotor.getEncoderValue(),
+	this.ghostCoord = trilateration.calcPosition(leftMotor.getEncoderValue(), rightMotor.getEncoderValue(), 
 		topMotor.getEncoderValue());
 
 	this.updatePosition();
     }
 
     /**
-     * Resets the ghost coordinate to the right motor.
+     * Resets the ghost {@link Coordinate} to the right motor.
      */
     public void resetToRight() {
 	ghostCoord.setX(rightMotor.getCoordinate().getX());
@@ -209,36 +223,36 @@ public class Ghost {
     /**
      * Returns the coordinate of the ghost.
      * 
-     * @return the Coordinate of the ghost.
+     * @return the {@link Coordinate} of the ghost.
      */
     public Coordinate getCoordinate() {
-	return ghostCoord;
+	return this.ghostCoord;
     }
 
     /**
      * Returns the Motor object of the top motor.
      * 
-     * @return the top motor object.
+     * @return the top {@link Motor} object.
      */
     public Motor getTopMotor() {
-	return topMotor;
+	return this.topMotor;
     }
 
     /**
      * Returns the Motor object of the left motor.
      * 
-     * @return the left motor object.
+     * @return the left {@link Motor} object.
      */
     public Motor getLeftMotor() {
-	return topMotor;
+	return this.leftMotor;
     }
 
     /**
      * Returns the Motor object of the right motor.
      * 
-     * @return the right motor object.
+     * @return the right {@link Motor} object.
      */
     public Motor getRightMotor() {
-	return topMotor;
+	return this.rightMotor;
     }
 }

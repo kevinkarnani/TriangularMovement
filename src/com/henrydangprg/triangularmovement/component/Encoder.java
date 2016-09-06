@@ -1,5 +1,12 @@
 package com.henrydangprg.triangularmovement.component;
 
+/**
+ * An encoder holds a precise value of how much a motor spins.
+ * 
+ * <p>
+ * As a motor spins, it will increment or decrement the encoder depending
+ * on the motor speed.
+ */
 public class Encoder {
     private double value = 0;
 

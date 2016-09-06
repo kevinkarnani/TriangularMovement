@@ -4,6 +4,11 @@ import com.henrydangprg.triangularmovement.utilities.Coordinate;
 
 import javafx.scene.shape.Line;
 
+/**
+ * The wire in this simulation is a line drawn
+ * from a motor object to the ghost. 
+ * For JavaFX, a line is created and attached from the motor to the ghost.
+ */
 public class Wire {
 
     Line line;

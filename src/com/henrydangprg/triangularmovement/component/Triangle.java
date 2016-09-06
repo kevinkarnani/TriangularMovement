@@ -6,6 +6,17 @@ import com.henrydangprg.triangularmovement.utilities.MathUtil;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+/**
+ * Creates a triangle to be shown in JavaFX.
+ * 
+ * <p>
+ * In this simulation, the triangle represents the area that
+ * the ghost is allowed to move in. The three motors in the
+ * vertices of the triangle move a ghost inside the triangle.
+ * 
+ * <p>
+ * Note: The triangle creates an isosceles triangle.
+ */
 public class Triangle {
 
     private Coordinate leftVertex;
@@ -87,7 +98,7 @@ public class Triangle {
     /**
      * Returns the top vertex as a Coordinate.
      * 
-     * @return the top vertex coordinate.
+     * @return the top vertex {@link Coordinate}.
      */
     public Coordinate getTopVertex() {
 	return topVertex;
@@ -96,7 +107,7 @@ public class Triangle {
     /**
      * Returns the left vertex as a Coordinate.
      * 
-     * @return the left vertex coordinate.
+     * @return the left vertex {@link Coordinate}.
      */
     public Coordinate getLeftVertex() {
 	return leftVertex;
@@ -105,7 +116,7 @@ public class Triangle {
     /**
      * Returns the right vertex as a Coordinate.
      * 
-     * @return the right vertex coordinate.
+     * @return the right vertex {@link Coordinate}.
      */
     public Coordinate getRightVertex() {
 	return rightVertex;

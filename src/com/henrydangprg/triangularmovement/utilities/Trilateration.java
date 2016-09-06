@@ -1,5 +1,16 @@
 package com.henrydangprg.triangularmovement.utilities;
 
+/**
+ * Calculates the point(s) of intersection of three spheres.
+ * 
+ * <p>
+ * In laid out terms, there are three vertices in a triangle, which
+ * are some distance from a point. You are given the distances of the
+ * point to each of the three vertices. Those distances act as the radius
+ * of a sphere, meaning that the point is the intersection of the three spheres.
+ * Trilateration uses a derived equation to calculate the coordinate
+ * which the point of intersection lies.
+ */
 public class Trilateration {
 
     Coordinate origin = new Coordinate(0, 0, 0);
@@ -42,8 +53,8 @@ public class Trilateration {
      * Translates the triangle to start at the origin.
      * 
      * <p>
-     * Creates a vector to move the trilaterated point to its position in the
-     * untranslated triangle.
+     * Creates a vector to move the trilaterated point to its position into the
+     * original untranslated triangle.
      */
     public void translate() {
 	if (!pos1.equals(origin)) {

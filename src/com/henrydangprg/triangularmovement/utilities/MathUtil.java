@@ -1,5 +1,11 @@
 package com.henrydangprg.triangularmovement.utilities;
 
+/**
+ * Contains miscellaneous mathematical methods.
+ * 
+ * <p>
+ * Mainly used to reduce clutter in other classes.
+ */
 public class MathUtil {
     /**
      * Clips a number so it never goes above its max number or below its minimum

@@ -1,5 +1,8 @@
 package com.henrydangprg.triangularmovement.utilities;
 
+/**
+ * A coordinate stores an object's x, y, and z value.
+ */
 public class Coordinate {
 
     private double x;
@@ -89,7 +92,7 @@ public class Coordinate {
      *            the x coordinate.
      */
     public double getX() {
-	return x;
+	return this.x;
     }
 
     /**
@@ -99,7 +102,7 @@ public class Coordinate {
      *            the y coordinate.
      */
     public double getY() {
-	return y;
+	return this.y;
     }
 
     /**
@@ -109,7 +112,7 @@ public class Coordinate {
      *            the z coordinate.
      */
     public double getZ() {
-	return z;
+	return this.z;
     }
 
     /**

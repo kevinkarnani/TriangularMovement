@@ -142,7 +142,7 @@ public class Main extends Application {
 		//Creates a window to show the simulation.
 		Scene scene = new Scene(layout, WIDTH, HEIGHT, Color.AQUAMARINE);
 
-		//Sets a button press to true when a button is press
+		//Sets a button press to true when a button is pressed
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -150,7 +150,7 @@ public class Main extends Application {
 			}
 		});
 		
-		//Sets a button press to false when a button is press
+		//Sets a button press to false when a button is released
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {

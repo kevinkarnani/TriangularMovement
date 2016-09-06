@@ -6,6 +6,16 @@ import com.henrydangprg.triangularmovement.utilities.MathUtil;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * A motor is a device that spins an axle forwards and backwards.
+ * 
+ * <p>
+ * In this simulation, the motor is represented by a grey circle in
+ * the window. Its position is defined by a given {@link Coordinate}.
+ * While the motor is rotating, it will spin depending on the set speed
+ * value given by @link {@link #set(double)} and increment or decrement
+ * the encoder.
+ */
 public class Motor {
     Circle motor = new Circle();
 
@@ -76,7 +86,7 @@ public class Motor {
      * <p>
      * The encoder value is how much wire the motor has released.
      * 
-     * @return the encoder value as a double.
+     * @return the {@link Encoder} value as a double.
      */
     public double getEncoderValue() {
 	return encoder.getValue();
@@ -94,7 +104,7 @@ public class Motor {
     /**
      * Returns the coordinate of the motor.
      * 
-     * @return the motor Coordinate.
+     * @return the motor {@link Coordinate}.
      */
     public Coordinate getCoordinate() {
 	return motorCoord;
@@ -103,7 +113,7 @@ public class Motor {
     /**
      * Returns the encoder object itself of the motor.
      * 
-     * @return the Encoder object.
+     * @return the {@link Encoder} object.
      */
     public Encoder getEncoder() {
 	return encoder;

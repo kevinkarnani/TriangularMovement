@@ -1,5 +1,17 @@
 package com.henrydangprg.triangularmovement.utilities;
 
+/**
+ * Creates a ratio value with an infinite amount of numbers.
+ * 
+ * <p>
+ * The ratio can be amplified to any set maximum value.
+ * 
+ * <p>
+ * Note: The original numbers are in fact a ratio. They
+ * are not reduced to a greatest common factor, as that would 
+ * have no effect on the original ratio. They would still be the
+ * same ratio, no matter what number is multiplied for all of them.
+ */
 public class Ratio {
     double[] num;
     double largest;
@@ -11,7 +23,7 @@ public class Ratio {
      *            the list of numbers in the ratio.
      */
     public void add(double... num) {
-	largest = 0;
+	this.largest = 0;
 	this.num = num;
     }
 
